@@ -1,0 +1,77 @@
+services:
+  # Service de l'application PHP (PHP-FPM)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: artcreation_app 
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "9000:9000"
+    depends_on:
+      - db
+      - mongodb
+    environment:
+      MYSQL_HOST: db
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      # MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MONGO_HOST: mongodb
+      MONGO_PORT: 27017
+      MONGO_DATABASE: ${MONGO_APP_DB}
+      MONGO_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+
+  # Service du serveur web (Nginx)
+  web:
+    image: nginx:alpine
+    container_name: artcreation_web 
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+
+  # Service de la base de données (MySQL)
+  db:
+    image: mysql:8.0
+    container_name: artcreation_db 
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - db_data:/var/lib/mysql # Volume persistant pour les données de la base de données
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.2
+    container_name: artcreation_phpmyadmin 
+    environment:
+      PMA_HOST: db # hôte de la BDD = nom du service MySQL ('db')
+      PMA_USER: ${DB_USER}
+      PMA_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+
+  mongodb:
+    image: mongo:7.0.9
+    container_name: artcreation_mongodb 
+    ports:
+      - "8090:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGO_APP_DB}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+
+# Volumes nommés pour la persistance des données / utilité pour la sécurité (live Docker avec Nathan)
+volumes:
+  db_data: # Volume pour stocker les données MySQL
+  mongodb_data: # Volume pour MongoDB
