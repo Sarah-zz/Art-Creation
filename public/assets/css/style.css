@@ -1,0 +1,211 @@
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 100;
+    src: url('../fonts/Lato-Thin.woff2') format('woff2'),
+        url('../fonts/Lato-Thin.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 300;
+    src: url('../fonts/Lato-Light.woff2') format('woff2'),
+        url('../fonts/Lato-Light.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/Lato-Regular.woff2') format('woff2'),
+        url('../fonts/Lato-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../fonts/Lato-Bold.woff2') format('woff2'),
+        url('../fonts/Lato-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/Montserrat-Regular.woff2') format('woff2'),
+        url('../fonts/Montserrat-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../fonts/Montserrat-Bold.woff2') format('woff2'),
+        url('../fonts/Montserrat-Bold.ttf') format('truetype');
+}
+
+/* Couleurs de la charte */
+body {
+    background-color: #fffdf8;
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+
+/* Navbar custom */
+.navbar .nav-link i {
+    vertical-align: middle;
+    line-height: 1;
+}
+
+.navbar-custom {
+    background-color: #C88B3A;
+}
+
+.navbar-custom .navbar-brand,
+.navbar-custom .nav-link {
+    font-family: 'Lato', sans-serif;
+    font-weight: 100;
+    /* Lato Thin */
+    text-transform: uppercase;
+    color: white !important;
+}
+
+.navbar-custom .nav-link:hover {
+    color: #F5E4C3 !important;
+}
+
+/* Footer */
+.site-footer {
+    background-color: #392C1E;
+}
+
+.footer-custom {
+    background-color: #392C1E;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+/* Bouton style footer */
+.btn-footer {
+    background-color: #392C1E;
+    color: #fff;
+    border: none;
+    font-family: 'Lato', sans-serif;
+    font-weight: 100;
+    text-transform: uppercase;
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.3rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-footer:hover {
+    background-color: #886944;
+    color: #fff;
+}
+
+/* Tableaux galerie */
+.img-clickable {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.img-clickable:hover {
+    transform: scale(1.05);
+}
+
+/* Cœur simple */
+.heart-icon {
+    cursor: pointer;
+    color: #ccc;
+    transition: color 0.3s;
+    user-select: none;
+}
+
+.heart-icon:hover {
+    color: rgb(252, 189, 189);
+}
+
+.heart-icon.favorited {
+    color: red;
+}
+
+/* Modal */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+}
+
+.modal-content img {
+    max-width: 100%;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+/* carousel bootstrap ateliers */
+.carousel .carousel-item img {
+    max-width: 600px;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.carousel {
+    margin-bottom: 50px;
+    margin-top: 50px;
+}
+
+/* Styles des flèches rondes rapprochées */
+.carousel .carousel-control-prev,
+.carousel .carousel-control-next {
+    width: 40px;
+    height: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel .carousel-control-prev {
+    left: 5px;
+}
+
+.carousel .carousel-control-next {
+    right: 5px;
+}
+
+/* Réduire taille des icônes */
+.carousel .carousel-control-prev-icon,
+.carousel .carousel-control-next-icon {
+    background-size: 50% 50%;
+}
