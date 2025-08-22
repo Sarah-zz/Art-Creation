@@ -106,39 +106,71 @@ body {
 }
 
 /* Tableaux galerie */
-.img-clickable {
+.gallery-space {
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+.gallery-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     cursor: pointer;
     transition: transform 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 0 0 12px 12px;
+    overflow: hidden;
+    height: 400px;
 }
 
-.img-clickable:hover {
-    transform: scale(1.05);
+.gallery-card:hover {
+    transform: scale(1.015);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
-/* Cœur simple */
+/* Wrapper pour centrer l’image */
+.gallery-img-wrapper {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.gallery-img {
+    max-height: 260px;
+    max-width: 100%;
+    object-fit: contain;
+    border-radius: 0;
+}
+
+/*Coeurs*/
 .heart-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 28px;
     cursor: pointer;
     color: #ccc;
-    transition: color 0.3s;
+    transition: color 0.3s, ease 0.2s ease;
     user-select: none;
 }
 
 .heart-icon:hover {
-    color: rgb(252, 189, 189);
+    color: rgb(247, 174, 174);
 }
 
 .heart-icon.favorited {
     color: red;
 }
 
-/* Modal */
+/*Modal*/
 .modal-overlay {
     display: none;
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background: rgba(0, 0, 0, 0.7);
     justify-content: center;
     align-items: center;
@@ -148,16 +180,17 @@ body {
 .modal-content {
     background: #fff;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 12px;
     max-width: 500px;
     width: 90%;
     text-align: center;
     position: relative;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
 .modal-content img {
     max-width: 100%;
-    border-radius: 5px;
+    border-radius: 8px;
     margin-bottom: 15px;
 }
 
@@ -166,6 +199,8 @@ body {
     top: 10px;
     right: 15px;
     font-size: 25px;
+    background: none;
+    border: none;
     cursor: pointer;
 }
 
