@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.img-clickable').forEach(card => {
         card.addEventListener('click', e => {
-            if (e.target.classList.contains('heart-icon')) return; // ignore clic sur cœur
+            if (e.target.classList.contains('heart-icon')) return; // ignore clic sur coeur
 
             modal.style.display = 'flex';
             modalImg.src = card.querySelector('img').src;

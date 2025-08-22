@@ -1,7 +1,16 @@
 </div> <!-- fin container -->
 
 <footer class="site-footer text-center text-white py-3">
-    &copy; <?php echo date('Y'); ?> Art & Création. Tous droits réservés.
+    <p></p>
+    <div>
+        &copy; <?php echo date('Y'); ?> Art & Création. Tous droits réservés.
+    </div>
+    <div class="container">
+        <p>
+            <a href="<?php echo $base_url; ?>/mentionslegales" class="text-white me-3">Mentions Légales</a>
+            <a href="<?php echo $base_url; ?>/contact" class="text-white">Contact</a>
+        </p>
+    </div>
 </footer>
 
 <!-- Scripts Bootstrap + FontAwesome + JS custom -->
