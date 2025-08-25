@@ -49,6 +49,11 @@ $routes = [
         'controller' => __DIR__ . '/../src/Controller/WorkshopsController.php',
         'view' => __DIR__ . '/../src/View/workshops.php'
     ],
+    'mentionslegales' => [
+        'method' => 'render',
+        'controller' => __DIR__ . '/../src/Controller/PageController.php',
+        'view' => __DIR__ . '/../src/View/mentionslegales.php'
+    ]
 ];
 
 // --- Route correspondante ---
