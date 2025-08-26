@@ -237,3 +237,58 @@ body {
 .carousel .carousel-control-next-icon {
     background-size: 50% 50%;
 }
+
+/* Calendrier */
+#calendar .day {
+    background: #F5E4C3;
+    border: 1px solid #C88B3A;
+    border-radius: 5px;
+    padding: 15px;
+    text-align: center;
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    color: #392C1E;
+    cursor: pointer;
+    width: 100%;
+    max-width: 130px;
+    transition: transform .25s ease, box-shadow .25s ease, background-color .25s ease, color .25s ease;
+    margin-bottom: 10px;
+}
+
+#calendar .day:hover,
+#calendar .day:focus-visible {
+    background: #C88B3A;
+    color: #fff;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    outline: none;
+}
+
+#calendar .day.reserved {
+    background: #7CBB55;
+    color: white;
+    font-weight: bold;
+    border: 2px solid #4A7A2B;
+}
+
+.month-divider {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: #C88B3A;
+}
+
+.month-section h4 {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    color: #392C1E;
+    text-transform: capitalize;
+    margin-bottom: 15px;
+}
+
+/* Card modale atelier */
+#atelierCard .modal-content {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}

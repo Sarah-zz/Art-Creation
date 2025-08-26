@@ -1,24 +1,27 @@
 <?php
 namespace App\Controller;
+
 class WorkshopsController
 {
     public function index(): array
     {
-        // Préparer les données
-        $workshops = [
-            ['name' => 'Atelier peinture', 'level' => 'Débutant', 'spots' => 5],
-            ['name' => 'Atelier peinture', 'level' => 'Intermédiaire', 'spots' => 2],
-            ['name' => 'Atelier peinture', 'level' => 'Avancé', 'spots' => 0],
-        ];
+        // true pour tester utlisateur connecté
+        $isLoggedIn = true;
 
-        $title = 'Liste des ateliers';
-        $content = 'Voici la liste des ateliers disponibles :';
+        // Génération calendrier : un samedi sur deux jusqu'à décembre
+        $calendarMonths = [];
+        $end = new \DateTime('last day of December');
+        $current = new \DateTime('next saturday');
 
-        // Retourner les données au routeur
+        while ($current <= $end) {
+            $monthName = ucfirst($current->format('F Y'));
+            $calendarMonths[$monthName][] = $current->format('d/m/Y');
+            $current->modify('+2 weeks');
+        }
+
         return [
-            'title' => $title,
-            'content' => $content,
-            'workshops' => $workshops,
+            'calendarMonths' => $calendarMonths,
+            'isLoggedIn' => $isLoggedIn
         ];
     }
 }
