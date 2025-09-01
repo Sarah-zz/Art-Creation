@@ -9,6 +9,15 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
+use App\Database\MongoDbConnection;
+
+// Initialisation de la connexion MongoDB
+try {
+    MongoDbConnection::initialize($_ENV['MONGO_URI'], $_ENV['MONGO_APP_DB']);
+} catch (\Exception $e) {
+    die("Erreur MongoDB : " . $e->getMessage());
+}
+
 // --- Début routeur ---
 $basePath = 'ArtCreation';
 $base_url = !empty($basePath) ? '/' . trim($basePath, '/') : '';
