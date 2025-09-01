@@ -6,7 +6,7 @@ class WorkshopsController
     public function index(): array
     {
         // true pour tester utlisateur connecté
-        $isLoggedIn = true;
+        $isLoggedIn = false;
 
         // Génération calendrier : un samedi sur deux jusqu'à décembre
         $calendarMonths = [];
