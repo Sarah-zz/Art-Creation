@@ -18,8 +18,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
 <script src="/assets/js/gallery.js"></script>
 <script src="/assets/js/workshops.js"></script>
-<script src="/assets/js/user.js"></script>
-<script src="assets/js/auth.js"></script>
+<script src="/assets/js/auth.js"></script>
 </body>
 
 </html>

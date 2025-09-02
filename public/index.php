@@ -20,14 +20,8 @@ try {
 }
 
 // --- Routeur ---
-$basePath = 'ArtCreation';
-$base_url = !empty($basePath) ? '/' . trim($basePath, '/') : '';
-
+$basePath = ''; // vide car site accessible via localhost
 $requestUri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
-if (!empty($basePath) && strpos($requestUri, trim($basePath, '/')) === 0) {
-    $requestUri = substr($requestUri, strlen(trim($basePath, '/')));
-    $requestUri = trim($requestUri, '/');
-}
 
 // --- Définition des routes ---
 $routes = [
@@ -62,11 +56,11 @@ $routes = [
         'view' => __DIR__ . '/../src/View/mentionslegales.php'
     ],
     'profil' => [
-    'controller' => __DIR__ . '/../src/Controller/PageController.php',
-    'method' => 'render',
-    'view' => __DIR__ . '/../src/View/profil.php'
-],
-    // --- Routes JSON pour UserController ---
+        'controller' => __DIR__ . '/../src/Controller/UserController.php',
+        'method' => 'profil',
+        'view' => null // vue choisie dynamiquement par la méthode
+    ],
+    // Routes JSON
     'register' => [
         'controller' => __DIR__ . '/../src/Controller/UserController.php',
         'method' => 'register',
@@ -87,7 +81,6 @@ $routes = [
     ],
 ];
 
-// --- Route correspondante ---
 $matchedRoute = $routes[$requestUri] ?? $routes[''] ?? null;
 $viewToInclude = __DIR__ . '/../src/View/error404.php';
 $data = [];
@@ -102,7 +95,7 @@ if ($matchedRoute) {
 
         $method = $matchedRoute['method'] ?? 'index';
 
-        // --- Gestion des routes JSON ---
+        // --- Routes JSON ---
         if (!empty($matchedRoute['json']) && $matchedRoute['json'] === true) {
             header('Content-Type: application/json');
             $result = $controller->$method($_POST ?? []);
@@ -110,14 +103,20 @@ if ($matchedRoute) {
             exit;
         }
 
-        // --- Gestion des routes classiques ---
+        // --- Routes classiques ---
         if ($controllerClass === "\\App\\Controller\\PageController") {
             $data = $controller->$method($requestUri);
         } else {
             $data = $controller->$method();
         }
 
-        $viewToInclude = $matchedRoute['view'] ?? $viewToInclude;
+        // --- Vue dynamique si route view null ---
+        if ($matchedRoute['view'] === null && !empty($data['view'])) {
+            $viewToInclude = $data['view'];
+        } else {
+            $viewToInclude = $matchedRoute['view'] ?? $viewToInclude;
+        }
+
     } else {
         http_response_code(500);
         echo "Erreur interne : Fichier contrôleur introuvable.";
@@ -127,6 +126,7 @@ if ($matchedRoute) {
     http_response_code(404);
 }
 
+// --- Extraction des données pour la vue ---
 if (!empty($data) && is_array($data)) {
     extract($data);
 }
