@@ -1,24 +1,25 @@
 <?php
 ob_start();
-if (session_status() == PHP_SESSION_NONE) {
+
+if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Autoloader Composer
+// --- Autoloader Composer et variables d'environnement ---
 require_once __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
 use App\Database\MongoDbConnection;
 
-// Initialisation de la connexion MongoDB
+// --- Initialisation MongoDB ---
 try {
     MongoDbConnection::initialize($_ENV['MONGO_URI'], $_ENV['MONGO_APP_DB']);
 } catch (\Exception $e) {
     die("Erreur MongoDB : " . $e->getMessage());
 }
 
-// --- Début routeur ---
+// --- Routeur ---
 $basePath = 'ArtCreation';
 $base_url = !empty($basePath) ? '/' . trim($basePath, '/') : '';
 
@@ -29,9 +30,6 @@ if (!empty($basePath) && strpos($requestUri, trim($basePath, '/')) === 0) {
 }
 
 // --- Définition des routes ---
-// utilisation de "render" pour les pages statiques, comme la home page et la page about
-// utilisation de "index" pour les pages dynamiques (formulaires, récupération de données)
-
 $routes = [
     '' => [
         'controller' => __DIR__ . '/../src/Controller/HomeController.php',
@@ -54,15 +52,39 @@ $routes = [
         'view' => __DIR__ . '/../src/View/about.php'
     ],
     'ateliers' => [
-        'method' => 'index',
         'controller' => __DIR__ . '/../src/Controller/WorkshopsController.php',
+        'method' => 'index',
         'view' => __DIR__ . '/../src/View/workshops.php'
     ],
     'mentionslegales' => [
-        'method' => 'render',
         'controller' => __DIR__ . '/../src/Controller/PageController.php',
+        'method' => 'render',
         'view' => __DIR__ . '/../src/View/mentionslegales.php'
-    ]
+    ],
+    'profil' => [
+    'controller' => __DIR__ . '/../src/Controller/PageController.php',
+    'method' => 'render',
+    'view' => __DIR__ . '/../src/View/profil.php'
+],
+    // --- Routes JSON pour UserController ---
+    'register' => [
+        'controller' => __DIR__ . '/../src/Controller/UserController.php',
+        'method' => 'register',
+        'view' => null,
+        'json' => true
+    ],
+    'login' => [
+        'controller' => __DIR__ . '/../src/Controller/UserController.php',
+        'method' => 'login',
+        'view' => null,
+        'json' => true
+    ],
+    'logout' => [
+        'controller' => __DIR__ . '/../src/Controller/UserController.php',
+        'method' => 'logout',
+        'view' => null,
+        'json' => true
+    ],
 ];
 
 // --- Route correspondante ---
@@ -80,13 +102,22 @@ if ($matchedRoute) {
 
         $method = $matchedRoute['method'] ?? 'index';
 
-        // Pour PageController, passer le nom de la page
+        // --- Gestion des routes JSON ---
+        if (!empty($matchedRoute['json']) && $matchedRoute['json'] === true) {
+            header('Content-Type: application/json');
+            $result = $controller->$method($_POST ?? []);
+            echo json_encode($result);
+            exit;
+        }
+
+        // --- Gestion des routes classiques ---
         if ($controllerClass === "\\App\\Controller\\PageController") {
             $data = $controller->$method($requestUri);
         } else {
             $data = $controller->$method();
         }
-        $viewToInclude = $matchedRoute['view'];
+
+        $viewToInclude = $matchedRoute['view'] ?? $viewToInclude;
     } else {
         http_response_code(500);
         echo "Erreur interne : Fichier contrôleur introuvable.";
@@ -99,7 +130,6 @@ if ($matchedRoute) {
 if (!empty($data) && is_array($data)) {
     extract($data);
 }
-
 
 // --- Inclusion header, vue, footer ---
 include __DIR__ . '/../templates/header.php';

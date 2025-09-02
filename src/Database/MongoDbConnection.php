@@ -3,39 +3,40 @@
 namespace App\Database;
 
 use MongoDB\Client;
-use MongoDB\Driver\Exception\Exception as MongoDBException;
 
 class MongoDbConnection
 {
     private static ?Client $client = null;
     private static string $databaseName;
 
+    // Initialise la connexion MongoDB
     public static function initialize(string $uri, string $dbName): void
     {
         try {
             self::$client = new Client($uri);
             self::$databaseName = $dbName;
+
+            // Test de connexion
             self::$client->listDatabases();
-            error_log("MongoDB: Connexion réussie à la base de données '$dbName'.");
-        } catch (MongoDBException $e) {
+            error_log("MongoDB: Connexion réussie à la base '$dbName'.");
+        } catch (\Exception $e) {
             error_log("MongoDB: Erreur de connexion: " . $e->getMessage());
-            throw new \Exception("Impossible de se connecter à la base de données MongoDB: " . $e->getMessage());
+            throw new \Exception("Impossible de se connecter à MongoDB: " . $e->getMessage());
         }
     }
 
+    // Retourne le client MongoDB
     public static function getClient(): Client
     {
         if (self::$client === null) {
-            throw new \Exception("La connexion MongoDB n'a pas été initialisée. Appelez MongoDbConnection::initialize() d'abord.");
+            throw new \Exception("Connexion MongoDB non initialisée. Appelez initialize() d'abord.");
         }
         return self::$client;
     }
 
+    // Retourne la base de données MongoDB
     public static function getDatabase(): \MongoDB\Database
     {
-        if (self::$client === null) {
-            throw new \Exception("La connexion MongoDB n'a pas été initialisée. Appelez MongoDbConnection::initialize() d'abord.");
-        }
-        return self::$client->selectDatabase(self::$databaseName);
+        return self::getClient()->selectDatabase(self::$databaseName);
     }
 }

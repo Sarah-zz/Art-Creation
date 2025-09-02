@@ -75,6 +75,10 @@ body {
     color: #F5E4C3 !important;
 }
 
+.icon-logged {
+    color: #87d698 !important;
+}
+
 /* Footer */
 .site-footer {
     background-color: #392C1E;
