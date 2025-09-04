@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    // --- VARIABLES POUR LE MODAL ---
     const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImage');
     const modalTitle = document.getElementById('modalTitle');
@@ -6,44 +8,69 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalDesc = document.getElementById('modalDescription');
     const closeBtn = document.querySelector('.close');
 
+    // --- OUVERTURE DU MODAL + TRACKING DU CLIC ---
     document.querySelectorAll('.img-clickable').forEach(card => {
         card.addEventListener('click', e => {
-
-            // Si clic sur le cœur, ne pas ouvrir le modal ni tracker
-            if (e.target.classList.contains('heart-icon')) return;
-
-            const tableauId = card.dataset.id;
-            const tableauTitle = card.dataset.title;
-            const tableauSize = card.dataset.size || '';
-            const tableauDesc = card.dataset.description || '';
+            if (e.target.classList.contains('heart-icon')) return; // ignore clic sur cœur
 
             modal.style.display = 'flex';
             modalImg.src = card.querySelector('img').src;
-            modalTitle.textContent = tableauTitle;
-            modalSize.textContent = "Taille : " + tableauSize;
-            modalDesc.textContent = tableauDesc;
+            modalTitle.textContent = card.dataset.title;
+            modalSize.textContent = "Taille : " + card.dataset.size;
+            modalDesc.textContent = card.dataset.description;
 
-            // Envoi du clic vers le controller pour MongoDB
+            // Tracking du clic
+            const tableauId = card.dataset.id;
+
             fetch('/track-click', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'tableauId=' + tableauId + '&tableauTitle=' + encodeURIComponent(tableauTitle)
+                body: 'tableauId=' + tableauId
             })
-                .then(response => response.json())
-                .then(data => console.log('Clic enregistré:', data))
-                .catch(err => console.error('Erreur trackClick:', err));
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Clic enregistré sur ID:', tableauId, 'à', data.clicked_at);
+                    } else {
+                        console.error('Erreur trackClick:', data.error);
+                    }
+                })
+                .catch(err => console.error('Erreur fetch trackClick:', err));
         });
     });
 
-    // Clic sur cœur pour favoris (visible seulement si connecté)
+    // --- FERMETURE DU MODAL ---
+    closeBtn.addEventListener('click', () => modal.style.display = 'none');
+    modal.addEventListener('click', e => {
+        if (e.target === modal) modal.style.display = 'none';
+    });
+
+    // --- GESTION DES FAVORIS ---
     document.querySelectorAll('.heart-icon').forEach(icon => {
         icon.addEventListener('click', e => {
-            e.stopPropagation();
-            icon.classList.toggle('favorited');
+            e.stopPropagation(); // évite ouverture du modal
+
+            const galleryId = icon.dataset.imageId;
+
+            fetch('/toggle-favorite', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'galleryId=' + galleryId
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        if (data.isFavorite) {
+                            icon.classList.add('favorited');
+                        } else {
+                            icon.classList.remove('favorited');
+                        }
+                    } else {
+                        console.error('Erreur toggleFavorite:', data.error);
+                    }
+                })
+                .catch(err => console.error('Erreur fetch toggleFavorite:', err));
         });
     });
 
-    // Fermeture du modal
-    closeBtn.addEventListener('click', () => modal.style.display = 'none');
-    modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
 });

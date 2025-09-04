@@ -3,6 +3,7 @@ $images = $data['images'] ?? [];
 $isLogged = !empty($_SESSION['user']['id'] ?? null);
 ?>
 
+
 <div class="container mt-4 gallery-space">
     <h1 class="text-center mb-5">Galerie</h1>
 
@@ -10,11 +11,10 @@ $isLogged = !empty($_SESSION['user']['id'] ?? null);
         <?php if (!empty($images)): ?>
             <?php foreach ($images as $img): ?>
                 <div class="col-md-4 d-flex">
-                    <div class="card gallery-card img-clickable h-100 w-100" data-id="<?= (int) $img['id'] ?>"
+                    <div class="card gallery-card img-clickable h-100 w-100" data-id="<?= htmlspecialchars($img['id']) ?>"
                         data-title="<?= htmlspecialchars($img['title']) ?>"
                         data-size="<?= htmlspecialchars($img['size'] ?? '') ?>"
-                        data-description="<?= htmlspecialchars($img['description'] ?? '') ?>"
-                        data-logged="<?= $isLogged ? '1' : '0' ?>">
+                        data-description="<?= htmlspecialchars($img['description'] ?? '') ?>">
 
                         <div class="gallery-img-wrapper">
                             <img src="<?= htmlspecialchars($img['image']) ?>" class="gallery-img"
@@ -23,11 +23,10 @@ $isLogged = !empty($_SESSION['user']['id'] ?? null);
 
                         <div class="card-body text-center position-relative">
                             <h5 class="card-title mb-0"><?= htmlspecialchars($img['title']) ?></h5>
-
-                            <?php if ($isLogged): ?>
-                                <span class="heart-icon" data-image-id="<?= (int) $img['id'] ?>">♥</span>
+                            <?php if (!empty($_SESSION['user'])): ?>
+                                <span class="heart-icon <?= in_array($img['id'], $favorites) ? 'favorited' : '' ?>"
+                                    data-image-id="<?= htmlspecialchars($img['id']) ?>">♥</span>
                             <?php endif; ?>
-
                         </div>
                     </div>
                 </div>

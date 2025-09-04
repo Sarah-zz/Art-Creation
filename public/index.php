@@ -89,6 +89,13 @@ $routes = [
         'view' => null,
         'json' => true //clics Mongo pour les stats admin
     ],
+    'toggle-favorite' => [
+        'controller' => __DIR__ . '/../src/Controller/GalleryController.php',
+        'method' => 'toggleFavorite',
+        'view' => null,
+        'json' => true
+    ],
+
 
 ];
 
