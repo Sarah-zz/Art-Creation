@@ -10,10 +10,12 @@ $images = $data['images'] ?? [];
             <?php foreach ($images as $img): ?>
                 <div class="col-md-4 d-flex">
                     <div class="card gallery-card img-clickable h-100 w-100" data-title="<?= htmlspecialchars($img['title']) ?>"
-                        data-size="1024x768" data-description="Description du tableau en cours.">
+                        data-size="<?= htmlspecialchars($img['size'] ?? '') ?>"
+                        data-description="<?= htmlspecialchars($img['description'] ?? '') ?>">
 
                         <div class="gallery-img-wrapper">
-                            <img src="<?= $img['url'] ?>" class="gallery-img" alt="<?= htmlspecialchars($img['title']) ?>">
+                            <img src="<?= htmlspecialchars($img['image']) ?>" class="gallery-img"
+                                alt="<?= htmlspecialchars($img['title']) ?>">
                         </div>
 
                         <div class="card-body text-center position-relative">
