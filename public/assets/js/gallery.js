@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalSize.textContent = "Taille : " + tableauSize;
             modalDesc.textContent = tableauDesc;
 
+            // Envoi du clic vers le controller pour MongoDB
             fetch('/track-click', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -34,14 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Gestion clic cœur pour favoris
+    // Clic sur cœur pour favoris (visible seulement si connecté)
     document.querySelectorAll('.heart-icon').forEach(icon => {
         icon.addEventListener('click', e => {
-            e.stopPropagation(); // empêche le clic de la card
+            e.stopPropagation();
             icon.classList.toggle('favorited');
         });
     });
 
+    // Fermeture du modal
     closeBtn.addEventListener('click', () => modal.style.display = 'none');
     modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
 });

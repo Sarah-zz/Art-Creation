@@ -1,5 +1,6 @@
 <?php
 $images = $data['images'] ?? [];
+$isLogged = !empty($_SESSION['user']['id'] ?? null);
 ?>
 
 <div class="container mt-4 gallery-space">
@@ -12,7 +13,8 @@ $images = $data['images'] ?? [];
                     <div class="card gallery-card img-clickable h-100 w-100" data-id="<?= (int) $img['id'] ?>"
                         data-title="<?= htmlspecialchars($img['title']) ?>"
                         data-size="<?= htmlspecialchars($img['size'] ?? '') ?>"
-                        data-description="<?= htmlspecialchars($img['description'] ?? '') ?>">
+                        data-description="<?= htmlspecialchars($img['description'] ?? '') ?>"
+                        data-logged="<?= $isLogged ? '1' : '0' ?>">
 
                         <div class="gallery-img-wrapper">
                             <img src="<?= htmlspecialchars($img['image']) ?>" class="gallery-img"
@@ -21,7 +23,11 @@ $images = $data['images'] ?? [];
 
                         <div class="card-body text-center position-relative">
                             <h5 class="card-title mb-0"><?= htmlspecialchars($img['title']) ?></h5>
-                            <span class="heart-icon" data-image-id="<?= (int) $img['id'] ?>">♥</span>
+
+                            <?php if ($isLogged): ?>
+                                <span class="heart-icon" data-image-id="<?= (int) $img['id'] ?>">♥</span>
+                            <?php endif; ?>
+
                         </div>
                     </div>
                 </div>
