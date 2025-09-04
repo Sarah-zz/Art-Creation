@@ -55,7 +55,7 @@ class UserController
 
         $this->userRepo->register($user);
 
-        // Connexion auto après inscription
+        // Connexion automatique après inscription
         $_SESSION['user'] = [
             'id' => $user->getId(),
             'pseudo' => $user->getPseudo(),
@@ -65,66 +65,52 @@ class UserController
             'role' => $user->getRole()
         ];
 
-        return ['success' => true];
+        return ['success' => true, 'redirect' => '/profil'];
     }
 
     // --- CONNEXION ---
     public function login(array $postData): array
-{
-    $identifier = trim($postData['identifier'] ?? '');
-    $password = $postData['password'] ?? '';
+    {
+        $identifier = trim($postData['identifier'] ?? '');
+        $password = $postData['password'] ?? '';
 
-    $errors = [];
+        if (empty($identifier) || empty($password)) {
+            return ['success' => false, 'errors' => ["Veuillez remplir tous les champs."]];
+        }
 
-    if (empty($identifier) || empty($password)) {
-        $errors[] = "Veuillez remplir tous les champs.";
-        return ['success' => false, 'errors' => $errors];
+        $user = $this->userRepo->getUserByEmail($identifier) ?? $this->userRepo->getUserByPseudo($identifier);
+
+        if (!$user || !password_verify($password, $user->getPassword())) {
+            return ['success' => false, 'errors' => ["Email, pseudo ou mot de passe incorrect."]];
+        }
+
+        $_SESSION['user'] = [
+            'id' => $user->getId(),
+            'pseudo' => $user->getPseudo(),
+            'firstname' => $user->getFirstname(),
+            'lastname' => $user->getLastname(),
+            'email' => $user->getEmail(),
+            'role' => $user->getRole()
+        ];
+
+        return ['success' => true, 'redirect' => '/profil'];
     }
-
-    $user = $this->userRepo->getUserByEmail($identifier) ?? $this->userRepo->getUserByPseudo($identifier);
-
-    if (!$user || !password_verify($password, $user->getPassword())) {
-        $errors[] = "Email, pseudo ou mot de passe incorrect.";
-        return ['success' => false, 'errors' => $errors];
-    }
-
-    $_SESSION['user'] = [
-        'id' => $user->getId(),
-        'pseudo' => $user->getPseudo(),
-        'firstname' => $user->getFirstname(),
-        'lastname' => $user->getLastname(),
-        'email' => $user->getEmail(),
-        'role' => $user->getRole()
-    ];
-
-    // Redirection **toujours vers /profil**
-    return [
-        'success' => true,
-        'redirect' => '/profil'
-    ];
-}
 
     // --- PROFIL ---
     public function profil(): array
     {
         if (empty($_SESSION['user'])) {
-            header('Location: /'); // non connecté -> home
+            header('Location: /');
             exit;
         }
 
         $role = $_SESSION['user']['role'] ?? 1;
 
-        // vue selon le rôle
-        if ($role == 2) {
-            $view = __DIR__ . '/../View/profiladmin.php';
-        } else {
-            $view = __DIR__ . '/../View/profil.php';
-        }
+        $view = ($role == 2)
+            ? __DIR__ . '/../View/profiladmin.php'
+            : __DIR__ . '/../View/profil.php';
 
-        return [
-            'view' => $view,
-            'data' => []
-        ];
+        return ['view' => $view, 'data' => []];
     }
 
     // --- DECONNEXION ---
@@ -143,9 +129,6 @@ class UserController
 
         session_destroy();
 
-        return [
-            'success' => true,
-            'redirect' => '/'
-        ];
+        return ['success' => true, 'redirect' => '/'];
     }
 }

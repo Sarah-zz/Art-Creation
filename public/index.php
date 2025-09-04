@@ -16,7 +16,11 @@ use App\Database\MongoDbConnection;
 try {
     MongoDbConnection::initialize($_ENV['MONGO_URI'], $_ENV['MONGO_APP_DB']);
 } catch (\Exception $e) {
-    die("Erreur MongoDB : " . $e->getMessage());
+    http_response_code(500);
+    die(json_encode([
+        'success' => false,
+        'errors' => ['Erreur MongoDB : ' . $e->getMessage()]
+    ]));
 }
 
 // --- Routeur ---
@@ -58,9 +62,9 @@ $routes = [
     'profil' => [
         'controller' => __DIR__ . '/../src/Controller/UserController.php',
         'method' => 'profil',
-        'view' => null // vue choisie dynamiquement par la méthode
+        'view' => null // vue choisie dynamiquement
     ],
-    // Routes JSON
+    // --- Routes JSON ---
     'register' => [
         'controller' => __DIR__ . '/../src/Controller/UserController.php',
         'method' => 'register',
@@ -96,14 +100,23 @@ if ($matchedRoute) {
         $method = $matchedRoute['method'] ?? 'index';
 
         // --- Routes JSON ---
-        if (!empty($matchedRoute['json']) && $matchedRoute['json'] === true) {
-            header('Content-Type: application/json');
+        if (!empty($matchedRoute['json'])) {
+            // Nettoyer tout ce qui traîne dans le buffer (warnings, espaces…)
+            if (ob_get_length()) {
+                ob_clean();
+            }
+
+            header('Content-Type: application/json; charset=utf-8');
+
+            // ⚠️ Important : passer $_POST ou [] par défaut
             $result = $controller->$method($_POST ?? []);
-            echo json_encode($result);
+
+            // Encodage JSON propre
+            echo json_encode($result, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             exit;
         }
 
-        // --- Routes classiques ---
+        // --- Routes classiques (pages HTML) ---
         if ($controllerClass === "\\App\\Controller\\PageController") {
             $data = $controller->$method($requestUri);
         } else {
@@ -119,7 +132,7 @@ if ($matchedRoute) {
 
     } else {
         http_response_code(500);
-        echo "Erreur interne : Fichier contrôleur introuvable.";
+        echo "Erreur interne : contrôleur introuvable.";
         exit();
     }
 } else {
