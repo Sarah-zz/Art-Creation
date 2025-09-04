@@ -5,11 +5,12 @@ $images = $data['images'] ?? [];
 <div class="container mt-4 gallery-space">
     <h1 class="text-center mb-5">Galerie</h1>
 
-    <div class="row g-4 ">
+    <div class="row g-4">
         <?php if (!empty($images)): ?>
             <?php foreach ($images as $img): ?>
                 <div class="col-md-4 d-flex">
-                    <div class="card gallery-card img-clickable h-100 w-100" data-title="<?= htmlspecialchars($img['title']) ?>"
+                    <div class="card gallery-card img-clickable h-100 w-100" data-id="<?= (int) $img['id'] ?>"
+                        data-title="<?= htmlspecialchars($img['title']) ?>"
                         data-size="<?= htmlspecialchars($img['size'] ?? '') ?>"
                         data-description="<?= htmlspecialchars($img['description'] ?? '') ?>">
 
@@ -20,7 +21,7 @@ $images = $data['images'] ?? [];
 
                         <div class="card-body text-center position-relative">
                             <h5 class="card-title mb-0"><?= htmlspecialchars($img['title']) ?></h5>
-                            <span class="heart-icon" data-image-id="<?= htmlspecialchars($img['title']) ?>">♥</span>
+                            <span class="heart-icon" data-image-id="<?= (int) $img['id'] ?>">♥</span>
                         </div>
                     </div>
                 </div>

@@ -83,6 +83,13 @@ $routes = [
         'view' => null,
         'json' => true
     ],
+    'track-click' => [
+        'controller' => __DIR__ . '/../src/Controller/GalleryController.php',
+        'method' => 'trackClick',
+        'view' => null,
+        'json' => true //clics Mongo pour les stats admin
+    ],
+
 ];
 
 $matchedRoute = $routes[$requestUri] ?? $routes[''] ?? null;
