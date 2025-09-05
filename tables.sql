@@ -22,8 +22,10 @@ CREATE TABLE workshops (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(150) NOT NULL,
     level VARCHAR(50),
+    description TEXT,
     date DATETIME NOT NULL,
-    max_places INT DEFAULT 3 NOT NULL CHECK (max_places >= 1)
+    max_places INT NOT NUL DEFAULT 10;
+    duration VARCHAR(20) DEFAULT '3h' NOT NULL
 );
 
 CREATE TABLE favorites (
@@ -39,6 +41,8 @@ CREATE TABLE registrations (
     user_id INT NOT NULL,
     workshop_id INT NOT NULL,
     participants INT NOT NULL CHECK (participants BETWEEN 1 AND 3),
+    registered_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (workshop_id) REFERENCES workshops(id) ON DELETE CASCADE
+    FOREIGN KEY (workshop_id) REFERENCES workshops(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_registration (user_id, workshop_id)
 );

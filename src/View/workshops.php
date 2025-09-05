@@ -1,19 +1,36 @@
-<h1>Dates de mes ateliers</h1>
+<?php
+$isLogged = !empty($_SESSION['user']['id'] ?? null);
+?>
+
+<h1>Mes ateliers</h1>
 <p>En général, je propose des ateliers un samedi sur deux. Tous niveaux bienvenus, de 3 à 99 ans !</p>
 
 <div id="calendar" class="container my-4">
     <div class="row">
-        <?php foreach ($calendarMonths as $monthName => $dates): ?>
+        <?php foreach ($workshopsByMonth as $monthName => $workshops): ?>
             <div class="col-12 col-md d-flex flex-column align-items-center mb-4 position-relative">
-                <h4 class="text-center mb-3"><?= $monthName ?></h4>
-                <?php foreach ($dates as $date): ?>
+                <h4 class="text-center mb-3"><?= htmlspecialchars($monthName) ?></h4>
+
+                <?php foreach ($workshops as $data):
+                    $workshop = $data['workshop'];
+                    $name = htmlspecialchars($workshop->getName() ?? '');
+                    $level = htmlspecialchars($workshop->getLevel() ?? '');
+                    $description = htmlspecialchars($workshop->getDescription() ?? '');
+                    $dateObj = $workshop->getDate();
+                    $dateStr = $dateObj ? $dateObj->format('d/m/Y H:i') : '';
+                    $maxPlaces = 10; // fixe 10 max
+                    $registered = $data['registered'] ?? 0;
+                    ?>
                     <div class="d-flex justify-content-center mb-2">
-                        <div class="day px-3 py-2 text-center" data-date="<?= $date ?>">
-                            <?= $date ?>
+                        <div class="day px-3 py-2 text-center" data-id="<?= $workshop->getId() ?>" data-name="<?= $name ?>"
+                            data-level="<?= $level ?>" data-description="<?= $description ?>" data-date="<?= $dateStr ?>"
+                            data-max="<?= $maxPlaces ?>" data-registered="<?= $registered ?>">
+                            <?= $dateObj ? $dateObj->format('d/m/Y') : '' ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
-                <?php if ($monthName !== array_key_last($calendarMonths)): ?>
+
+                <?php if ($monthName !== array_key_last($workshopsByMonth)): ?>
                     <div class="month-divider"></div>
                 <?php endif; ?>
             </div>
@@ -31,8 +48,17 @@
             </div>
             <div class="modal-body">
                 <p id="atelierLevel"></p>
+                <p id="atelierDesc"></p>
+                <p id="atelierDate"></p>
+                <p>
+                    <label for="participantsSelect">Nombre de participants :</label>
+                    <select id="participantsSelect" class="form-select w-auto d-inline-block ms-2">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </p>
                 <p id="atelierSpots"></p>
-                <p id="atelierHours"></p>
             </div>
             <div class="modal-footer">
                 <button id="btnInscrire" class="btn btn-primary">Je participe à l'atelier !</button>
@@ -79,7 +105,3 @@
         <span class="visually-hidden">Suivant</span>
     </button>
 </div>
-
-<script>
-    const isLoggedIn = <?= $isLoggedIn ? 'true' : 'false' ?>;
-</script>
