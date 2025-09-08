@@ -36,7 +36,7 @@ $userWorkshops = $userWorkshops ?? []; // Evite les warnings
                             <div class="workshop-card p-2 border rounded h-100 d-flex flex-column justify-content-between">
                                 <div>
                                     <p><strong><?= safe($workshop['name'] ?? '') ?></strong></p>
-                                    <p><?= safe($workshop['date'] ?? '') ?></p>
+                                    <p><?= safe($workshop['date'] ?? '') ?> Durée : 3h</p>
                                     <p id="spots-<?= (int) ($workshop['workshop_id'] ?? 0) ?>">
                                         Nombre de participants réservés : <?= (int) ($workshop['participants'] ?? 0) ?>
                                     </p>

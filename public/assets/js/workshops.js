@@ -6,8 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('#calendar .day').forEach(day => {
         const registered = parseInt(day.dataset.registered || 0);
 
-        // --- Si l'utilisateur est déjà inscrit, marquer la date ---
-        if (registered > 0) {
+        // --- Si l'utilisateur est connecté et déjà inscrit, marquer la date ---
+        if (isLoggedIn && registered > 0) {
             day.classList.add('reserved');
             day.title = "Inscription confirmée !";
         }
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
             spotsEl.innerText = `Il reste ${remaining} place${remaining > 1 ? 's' : ''} sur ${maxPlaces}`;
 
             // --- Bouton selon inscription ---
-            if (registered > 0) {
+            if (isLoggedIn && registered > 0) {
                 btnInscrire.className = "btn btn-success";
                 btnInscrire.innerText = "Inscription confirmée !";
                 btnInscrire.disabled = true;
@@ -74,11 +74,9 @@ document.addEventListener("DOMContentLoaded", () => {
                             const newRegistered = registered + places;
                             day.dataset.registered = newRegistered;
 
-                            // Mettre à jour le nombre de places
                             const remainingNew = Math.max(0, maxPlaces - newRegistered);
                             spotsEl.innerText = `Il reste ${remainingNew} place${remainingNew > 1 ? 's' : ''} sur ${maxPlaces}`;
 
-                            // Griser la date et ajouter style reserved
                             day.classList.add('reserved');
                             document.getElementById('atelierDate').style.color = "#999";
                             day.title = "Inscription confirmée !";
