@@ -41,28 +41,32 @@ class RegistrationsRepository
         return $stmt->fetchColumn() > 0;
     }
 
-    public function addRegistration(Registration $registration): void
+    public function addRegistration(Registration $registration): bool
     {
         $stmt = $this->pdo->prepare(
             "INSERT INTO registrations (user_id, workshop_id, participants)
-            VALUES (:user_id, :workshop_id, :participants)"
+        VALUES (:user_id, :workshop_id, :participants)
+        ON DUPLICATE KEY UPDATE 
+            participants = VALUES(participants),
+            registered_at = NOW()"
         );
-        $stmt->execute([
+        return $stmt->execute([
             'user_id' => $registration->getUserId(),
             'workshop_id' => $registration->getWorkshopId(),
             'participants' => $registration->getParticipants()
         ]);
     }
 
-    public function removeRegistration(int $userId, int $workshopId): void
+    public function removeRegistration(int $userId, int $workshopId): bool
     {
         $stmt = $this->pdo->prepare(
             "DELETE FROM registrations 
-            WHERE user_id = :user_id AND workshop_id = :workshop_id"
+        WHERE user_id = :user_id AND workshop_id = :workshop_id"
         );
-        $stmt->execute([
+        return $stmt->execute([
             'user_id' => $userId,
             'workshop_id' => $workshopId
         ]);
     }
+
 }

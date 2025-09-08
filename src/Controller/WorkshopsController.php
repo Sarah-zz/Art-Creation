@@ -56,36 +56,38 @@ class WorkshopsController
     }
 
     // --- Inscription à un workshop ---
-    public function register(array $postData): array
+    public function register(array $postData): void
     {
+        header('Content-Type: application/json; charset=utf-8');
+
         $userId = $_SESSION['user']['id'] ?? null;
         if (!$userId) {
-            return ['success' => false, 'error' => 'Vous devez être connecté pour vous inscrire.'];
+            echo json_encode(['success' => false, 'error' => 'Vous devez être connecté pour vous inscrire.']);
+            return;
         }
 
         $workshopId = $postData['workshop_id'] ?? null;
         $participants = (int) ($postData['participants'] ?? 1);
 
         if (!$workshopId || $participants < 1 || $participants > 3) {
-            return ['success' => false, 'error' => 'Données invalides pour l’inscription.'];
+            echo json_encode(['success' => false, 'error' => 'Données invalides pour l’inscription.']);
+            return;
         }
 
         // Vérifie si déjà inscrit
         if ($this->registrationsRepo->isUserRegistered($userId, $workshopId)) {
-            return ['success' => false, 'error' => 'Vous êtes déjà inscrit à cet atelier.'];
+            echo json_encode(['success' => false, 'error' => 'Vous êtes déjà inscrit à cet atelier.']);
+            return;
         }
 
         // Vérifie si assez de places
         $workshop = $this->workshopsRepo->findById($workshopId);
         $totalRegistered = $this->registrationsRepo->getTotalParticipantsForWorkshop($workshopId);
 
-        if ($participants > 3) {
-            return ['success' => false, 'error' => 'Vous ne pouvez réserver que 3 places maximum.'];
-        }
         if ($totalRegistered + $participants > $workshop->getMaxPlaces()) {
-            return ['success' => false, 'error' => 'Pas assez de places disponibles.'];
+            echo json_encode(['success' => false, 'error' => 'Pas assez de places disponibles.']);
+            return;
         }
-
 
         // Création de l’inscription
         $registration = new Registration();
@@ -95,23 +97,27 @@ class WorkshopsController
 
         $this->registrationsRepo->addRegistration($registration);
 
-        return ['success' => true, 'message' => 'Inscription réussie !'];
+        echo json_encode(['success' => true, 'message' => 'Inscription réussie !']);
     }
 
+
     // --- Annulation d’une inscription ---
-    public function cancel(array $postData): array
+    public function cancel(array $postData): void
     {
+        header('Content-Type: application/json; charset=utf-8');
+
         $userId = $_SESSION['user']['id'] ?? null;
-        $workshopId = $postData['workshopId'] ?? null;
+        $workshopId = $postData['workshop_id'] ?? null;
 
         if (!$userId || !$workshopId) {
-            return ['success' => false, 'error' => 'Utilisateur ou workshop manquant'];
+            echo json_encode(['success' => false, 'error' => 'Utilisateur ou workshop manquant']);
+            return;
         }
 
         $this->registrationsRepo->removeRegistration($userId, $workshopId);
 
-        return ['success' => true, 'message' => 'Inscription annulée'];
+        echo json_encode(['success' => true, 'message' => 'Inscription annulée']);
     }
 
-    
+
 }

@@ -1,6 +1,11 @@
 <?php
 $isLogged = !empty($_SESSION['user']['id'] ?? null);
 ?>
+<script>
+    const isLoggedIn = <?= $isLogged ? 'true' : 'false' ?>;
+    // pour pouvoir utiliser isLoggedIn dans mon workshops.js
+</script>
+
 
 <h1>Mes ateliers</h1>
 <p>En général, je propose des ateliers un samedi sur deux. Tous niveaux bienvenus, de 3 à 99 ans !</p>

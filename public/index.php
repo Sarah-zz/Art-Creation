@@ -95,6 +95,13 @@ $routes = [
         'view' => null,
         'json' => true
     ],
+    'workshops/register' => [
+        'controller' => __DIR__ . '/../src/Controller/WorkshopsController.php',
+        'method' => 'register',
+        'view' => null,
+        'json' => true
+    ],
+
 
 
 ];
