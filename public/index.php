@@ -100,13 +100,12 @@ $routes = [
         'method' => 'register',
         'view' => null,
         'json' => true
-    ],
-    'workshops/cancel' => [
-        'controller' => __DIR__ . '/../src/Controller/WorkshopsController.php',
-        'method' => 'cancel',
-        'view' => null,
-        'json' => true
-    ],
+    ],'workshops/cancel' => [
+    'controller' => __DIR__ . '/../src/Controller/WorkshopsController.php',
+    'method' => 'cancel',
+    'view' => null,
+    'json' => true
+],
 
 
 

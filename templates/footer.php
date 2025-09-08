@@ -1,4 +1,5 @@
 </div> <!-- fin container -->
+<?php include __DIR__ . '/auth-modales.php'; ?>
 
 <footer class="site-footer text-center text-white py-3">
     <p></p>
