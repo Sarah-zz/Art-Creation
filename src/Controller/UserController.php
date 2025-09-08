@@ -104,14 +104,22 @@ class UserController
             exit;
         }
 
-        $role = $_SESSION['user']['role'] ?? 1;
+        $user = $_SESSION['user'];
+        $registrationsRepo = new \App\Repository\RegistrationsRepository();
+        $userWorkshops = $registrationsRepo->getUserRegistrations($user['id']); // méthode à créer
 
+        $role = $user['role'] ?? 1;
         $view = ($role == 2)
             ? __DIR__ . '/../View/profiladmin.php'
-            : __DIR__ . '/../View/profil.php';
+            : __DIR__ . '/../View/profiluser.php';
 
-        return ['view' => $view, 'data' => []];
+        return [
+            'view' => $view,
+            'user' => $user,
+            'userWorkshops' => $userWorkshops
+        ];
     }
+
 
     // --- DECONNEXION ---
     public function logout(): array

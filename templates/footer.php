@@ -19,6 +19,7 @@
 <script src="/assets/js/gallery.js"></script>
 <script src="/assets/js/workshops.js"></script>
 <script src="/assets/js/auth.js"></script>
+<script src="/assets/js/user-profil.js"></script>
 </body>
 
 </html>

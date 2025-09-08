@@ -69,4 +69,18 @@ class RegistrationsRepository
         ]);
     }
 
+    public function getUserRegistrations(int $userId): array
+    {
+        $stmt = $this->pdo->prepare("
+        SELECT r.workshop_id, r.participants, w.name, w.level, w.description, w.date
+        FROM registrations r
+        INNER JOIN workshops w ON r.workshop_id = w.id
+        WHERE r.user_id = :user_id
+        ORDER BY w.date ASC
+    ");
+        $stmt->execute(['user_id' => $userId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
 }

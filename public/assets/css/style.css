@@ -269,10 +269,10 @@ body {
 }
 
 #calendar .day.reserved {
-    background: #7CBB55;
+    background: #a0b992;
     color: white;
-    font-weight: bold;
-    border: 2px solid #4A7A2B;
+    font-style: italic;
+    border: 1px solid #6a805c;
 }
 
 .month-divider {
