@@ -58,4 +58,16 @@ class FavoritesRepository
         $stmt->execute(['user_id' => $userId]);
         return $stmt->fetchAll(\PDO::FETCH_COLUMN);
     }
+
+    //Prépare les stats admin
+    public function countFavoritesByGallery(): array
+    {
+        $sql = "SELECT g.id, g.title, COUNT(f.user_id) AS total_favs
+            FROM gallery g
+            LEFT JOIN favorites f ON g.id = f.gallery_id
+            GROUP BY g.id, g.title
+            ORDER BY total_favs DESC";
+        return $this->pdo->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
 }

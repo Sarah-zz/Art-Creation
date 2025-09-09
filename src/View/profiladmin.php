@@ -124,6 +124,7 @@ $topClics = $topClics ?? [];
 
     <!-- Onglet Statistiques -->
     <div class="tab-pane fade" id="stats" role="tabpanel">
+        <!-- CLICS -->
         <h3>Tableaux les plus cliqués par les internautes</h3>
         <?php if (!empty($topClics)):
             $maxClics = max(array_column($topClics, 'total_clics'));
@@ -148,7 +149,32 @@ $topClics = $topClics ?? [];
             </div>
         <?php else: ?>
             <p>Aucun clic enregistré pour le moment.</p>
+        <?php endif; ?><br>
+
+        <!-- FAVORIS -->
+        <h3>Top des tableaux mis en favoris</h3>
+        <?php if (!empty($topFavorites)): ?>
+            <div class="list-group mt-2">
+                <?php foreach ($topFavorites as $fav):
+                    $title = $fav['title'] ?? 'Titre inconnu';
+                    $totalFavs = $fav['total_favs'] ?? 0;
+                    ?>
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span><?= htmlspecialchars($title) ?></span>
+                            <span class="badge bg-danger"><?= $totalFavs ?> favori<?= $totalFavs > 1 ? 's' : '' ?></span>
+                        </div>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: <?= $widthPercent ?>%;"
+                                aria-valuenow="<?= $totalFavs ?>" aria-valuemin="0" aria-valuemax="<?= $maxFavs ?>">
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p>Aucun favori enregistré pour le moment.</p>
         <?php endif; ?>
-    </div>
+</div>
 
 </div>
