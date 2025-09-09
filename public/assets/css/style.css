@@ -46,6 +46,22 @@
         url('../fonts/Montserrat-Bold.ttf') format('truetype');
 }
 
+/*footer collé en bas */
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+footer.site-footer {
+    margin-top: auto;
+}
+
 /* Couleurs de la charte */
 body {
     background-color: #fffdf8;

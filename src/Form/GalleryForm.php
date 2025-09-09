@@ -1,5 +1,5 @@
 <?php
-// Détermine si on est en modification ou ajout
+// Vérifie si on est en modification
 $isEdit = isset($image);
 $title = $isEdit ? $image['title'] : '';
 $imageUrl = $isEdit ? $image['image'] : '';
@@ -8,26 +8,51 @@ $size = $isEdit ? $image['size'] : '';
 $action = $isEdit ? "/admin/gallery/edit/{$image['id']}" : "/admin/gallery/add";
 ?>
 
-<h2><?= $isEdit ? "Modifier l'image" : "Ajouter une nouvelle image" ?></h2>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
 
-<form method="post" action="<?= $action ?>">
-    <div>
-        <label>Titre</label>
-        <input type="text" name="title" value="<?= htmlspecialchars($title) ?>" required>
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><?= $isEdit ? "Modifier l'image" : "Ajouter une nouvelle image" ?></h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="<?= $action ?>">
+
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Titre</label>
+                            <input type="text" id="title" name="title" class="form-control"
+                                value="<?= htmlspecialchars($title) ?>" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="image" class="form-label">URL de l'image</label>
+                            <input type="text" id="image" name="image" class="form-control"
+                                value="<?= htmlspecialchars($imageUrl) ?>" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea id="description" name="description" class="form-control"
+                                rows="3"><?= htmlspecialchars($description) ?></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="size" class="form-label">Taille</label>
+                            <input type="text" id="size" name="size" class="form-control"
+                                value="<?= htmlspecialchars($size) ?>">
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button type="submit"
+                                class="btn btn-primary"><?= $isEdit ? "Modifier" : "Ajouter" ?></button>
+                            <a href="/admin" class="btn btn-secondary">Annuler</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
     </div>
-    <div>
-        <label>URL de l'image</label>
-        <input type="text" name="image" value="<?= htmlspecialchars($imageUrl) ?>" required>
-    </div>
-    <div>
-        <label>Description</label>
-        <textarea name="description"><?= htmlspecialchars($description) ?></textarea>
-    </div>
-    <div>
-        <label>Taille</label>
-        <input type="text" name="size" value="<?= htmlspecialchars($size) ?>">
-    </div>
-    <div>
-        <button type="submit"><?= $isEdit ? "Modifier" : "Ajouter" ?></button>
-    </div>
-</form>
+</div>

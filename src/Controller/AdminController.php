@@ -34,7 +34,7 @@ class AdminController
     }
 
     // --- AJOUTER UNE IMAGE ---
-    public function addGallery(): void
+    public function addGallery(): array
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = [
@@ -49,13 +49,16 @@ class AdminController
             exit;
         }
 
-        // Affiche le formulaire
-        require __DIR__ . '/../Form/GalleryForm.php';
+        return [
+            'view' => __DIR__ . '/../Form/GalleryForm.php'
+        ];
     }
 
+
     // --- MODIFIER UNE IMAGE ---
-    public function editGallery(int $id): void
+    public function editGallery(): array
     {
+        $id = (int) ($_GET['id'] ?? 0);
         $image = $this->galleryRepo->findById($id);
         if (!$image) {
             header('Location: /admin');
@@ -69,15 +72,18 @@ class AdminController
                 'description' => $_POST['description'] ?? '',
                 'size' => $_POST['size'] ?? ''
             ];
-
             $this->galleryRepo->update($id, $data);
             header('Location: /admin');
             exit;
         }
 
-        // Affiche le formulaire avec les données existantes
-        require __DIR__ . '/../Form/GalleryForm.php';
+        return [
+            'view' => __DIR__ . '/../Form/GalleryForm.php',
+            'image' => $image
+        ];
     }
+
+
 
     // --- SUPPRIMER UNE IMAGE ---
     public function deleteGallery(int $id): void

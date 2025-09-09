@@ -132,20 +132,17 @@ $routes = [
 ];
 
 //Logique route avec ID
-//gestion edit
+//gestion edit et delete
 if (preg_match('#^admin/gallery/edit/(\d+)$#', $requestUri, $matches)) {
     $_GET['id'] = $matches[1];
-    $controller = new \App\Controller\AdminController();
-    $controller->editGallery((int) $_GET['id']);
-    exit;
+    $requestUri = 'admin/gallery/edit';
 }
-//gestion delete
+
 if (preg_match('#^admin/gallery/delete/(\d+)$#', $requestUri, $matches)) {
-    session_start();
-    $controller = new \App\Controller\AdminController();
-    $controller->deleteGallery((int) $matches[1]);
-    exit;
+    $_GET['id'] = $matches[1];
+    $requestUri = 'admin/gallery/delete';
 }
+
 
 $matchedRoute = $routes[$requestUri] ?? null;
 $viewToInclude = __DIR__ . '/../src/View/error404.php';
@@ -158,8 +155,8 @@ if ($matchedRoute) {
         $controllerClass = basename($matchedRoute['controller'], '.php');
         $controllerClass = "\\App\\Controller\\$controllerClass";
         $controller = new $controllerClass();
-
         $method = $matchedRoute['method'] ?? 'index';
+        $data = $controller->$method();
 
         // --- Routes JSON ---
         if (!empty($matchedRoute['json'])) {

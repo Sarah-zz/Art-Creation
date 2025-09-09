@@ -1,7 +1,7 @@
 </div> <!-- fin container -->
 <?php include __DIR__ . '/auth-modales.php'; ?>
 
-<footer class="site-footer text-center text-white py-3">
+<footer class="site-footer text-center text-white py-3 mt-auto">
     <p></p>
     <div>
         &copy; <?php echo date('Y'); ?> Art & Création. Tous droits réservés.
