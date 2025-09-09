@@ -92,4 +92,5 @@ class GalleryController
             return ['success' => false, 'error' => $e->getMessage()];
         }
     }
+
 }

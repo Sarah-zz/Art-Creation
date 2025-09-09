@@ -8,92 +8,147 @@ if (empty($_SESSION['user']) || $_SESSION['user']['role'] != 2) {
 // Données passées depuis le controller
 $images = $images ?? [];
 $workshops = $workshops ?? [];
+$topClics = $topClics ?? [];
 ?>
 
-<h1>Dashboard Lya</h1>
+<h1>Dashboard Lya</h1><br>
 
-<!-- GALERIE -->
+<!-- Onglets Bootstrap -->
+<ul class="nav nav-tabs" id="adminTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="gallery-tab" data-bs-toggle="tab" data-bs-target="#gallery" type="button"
+            role="tab">Galerie</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="workshops-tab" data-bs-toggle="tab" data-bs-target="#workshops" type="button"
+            role="tab">Ateliers</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="stats-tab" data-bs-toggle="tab" data-bs-target="#stats" type="button"
+            role="tab">Statistiques</button>
+    </li>
+</ul>
 
-<h2 class="mt-4">Gestion de la galerie</h2>
-<div class="mb-3">
-    <a href="/admin/gallery/add" class="btn btn-success">Ajouter un nouveau tableau</a>
-</div>
+<div class="tab-content mt-3" id="adminTabsContent">
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Image</th>
-            <th>Titre</th>
-            <th>Description</th>
-            <th>Taille</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php if (!empty($images)): ?>
-            <?php foreach ($images as $img): ?>
+    <!-- Onglet Galerie -->
+
+    <div class="tab-pane fade show active" id="gallery" role="tabpanel">
+        <p>Gestion des modifications de la page galerie. Ajouter - Modifier - Supprimer</p>
+        <div class="mb-3">
+            <a href="/admin/gallery/add" class="btn btn-success">Ajouter un nouveau tableau</a>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td><?= htmlspecialchars($img['id']) ?></td>
-                    <td><img src="<?= htmlspecialchars($img['image']) ?>" alt="<?= htmlspecialchars($img['title']) ?>"
-                            width="100"></td>
-                    <td><?= htmlspecialchars($img['title']) ?></td>
-                    <td><?= htmlspecialchars($img['description'] ?? '') ?></td>
-                    <td><?= htmlspecialchars($img['size'] ?? '') ?></td>
-                    <td>
-                        <a href="/admin/gallery/edit/<?= $img['id'] ?>" class="btn btn-primary btn-sm">Modifier</a>
-                        <a href="/admin/gallery/delete/<?= $img['id'] ?>" class="btn btn-danger btn-sm"
-                            onclick="return confirm('Voulez-vous vraiment supprimer ce tableau ?');">Supprimer</a>
-                    </td>
+                    <th>ID</th>
+                    <th>Image</th>
+                    <th>Titre</th>
+                    <th>Description</th>
+                    <th>Taille</th>
+                    <th>Actions</th>
                 </tr>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <tr>
-                <td colspan="6" class="text-center">Aucune image disponible.</td>
-            </tr>
-        <?php endif; ?>
-    </tbody>
-</table>
+            </thead>
+            <tbody>
+                <?php if (!empty($images)): ?>
+                    <?php foreach ($images as $img): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($img['id']) ?></td>
+                            <td><img src="<?= htmlspecialchars($img['image']) ?>" alt="<?= htmlspecialchars($img['title']) ?>"
+                                    width="100"></td>
+                            <td><?= htmlspecialchars($img['title']) ?></td>
+                            <td><?= htmlspecialchars($img['description'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($img['size'] ?? '') ?></td>
+                            <td>
+                                <a href="/admin/gallery/edit/<?= $img['id'] ?>" class="btn btn-primary btn-sm">Modifier</a>
+                                <a href="/admin/gallery/delete/<?= $img['id'] ?>" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Voulez-vous vraiment supprimer ce tableau ?');">Supprimer</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="6" class="text-center">Aucune image disponible.</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 
-<!-- ATELIERS -->
-<h2 class="mt-5">Gestion des ateliers</h2>
-<div class="mb-3">
-    <a href="/admin/workshops/add" class="btn btn-success">Ajouter un nouvel atelier</a>
-</div>
+    <!-- Onglet Ateliers -->
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nom</th>
-            <th>Date</th>
-            <th>Niveau</th>
-            <th>Places disponibles</th>
-            <th>Places réservées</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php if (!empty($workshops)): ?>
-            <?php foreach ($workshops as $w): ?>
+    <div class="tab-pane fade" id="workshops" role="tabpanel">
+        <p>Gestion des modifications de la page ateliers. Ajouter - Modifier - Supprimer</p>
+        <div class="mb-3">
+            <a href="/admin/workshops/add" class="btn btn-success">Ajouter un nouvel atelier</a>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td><?= htmlspecialchars($w['id']) ?></td>
-                    <td><?= htmlspecialchars($w['name']) ?></td>
-                    <td><?= htmlspecialchars($w['date']) ?></td>
-                    <td><?= htmlspecialchars($w['level'] ?? '') ?></td>
-                    <td><?= (int) ($w['max_places'] ?? 0) - (int) ($w['registered'] ?? 0) ?></td>
-                    <td><?= (int) ($w['registered'] ?? 0) ?></td>
-                    <td>
-                        <a href="/admin/workshops/edit/<?= $w['id'] ?>" class="btn btn-primary btn-sm">Modifier</a>
-                        <a href="/admin/workshops/delete/<?= $w['id'] ?>" class="btn btn-danger btn-sm"
-                            onclick="return confirm('Voulez-vous vraiment supprimer cet atelier ?');">Supprimer</a>
-                    </td>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Date</th>
+                    <th>Niveau</th>
+                    <th>Places disponibles</th>
+                    <th>Places réservées</th>
+                    <th>Actions</th>
                 </tr>
-            <?php endforeach; ?>
+            </thead>
+            <tbody>
+                <?php if (!empty($workshops)): ?>
+                    <?php foreach ($workshops as $w): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($w['id']) ?></td>
+                            <td><?= htmlspecialchars($w['name']) ?></td>
+                            <td><?= htmlspecialchars($w['date']) ?></td>
+                            <td><?= htmlspecialchars($w['level'] ?? '') ?></td>
+                            <td><?= (int) ($w['max_places'] ?? 0) - (int) ($w['registered'] ?? 0) ?></td>
+                            <td><?= (int) ($w['registered'] ?? 0) ?></td>
+                            <td>
+                                <a href="/admin/workshops/edit/<?= $w['id'] ?>" class="btn btn-primary btn-sm">Modifier</a>
+                                <a href="/admin/workshops/delete/<?= $w['id'] ?>" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Voulez-vous vraiment supprimer cet atelier ?');">Supprimer</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="7" class="text-center">Aucun atelier disponible.</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Onglet Statistiques -->
+    <div class="tab-pane fade" id="stats" role="tabpanel">
+        <h3>Tableaux les plus cliqués par les internautes</h3>
+        <?php if (!empty($topClics)):
+            $maxClics = max(array_column($topClics, 'total_clics'));
+            ?>
+            <div class="list-group mt-3">
+                <?php foreach ($topClics as $clic):
+                    $title = $clic['tableau_title'] ?? 'Titre inconnu';
+                    $totalClics = $clic['total_clics'] ?? 0;
+                    $widthPercent = $maxClics > 0 ? ($totalClics / $maxClics) * 100 : 0;
+                    ?>
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span><?= htmlspecialchars($clic['tableau_title']) ?></span>
+                            <span class="badge bg-warning"><?= $totalClics ?> clic<?= $totalClics > 1 ? 's' : '' ?></span>
+                        </div>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: <?= $widthPercent ?>%;"
+                                aria-valuenow="<?= $totalClics ?>" aria-valuemin="0" aria-valuemax="<?= $maxClics ?>"></div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         <?php else: ?>
-            <tr>
-                <td colspan="7" class="text-center">Aucun atelier disponible.</td>
-            </tr>
+            <p>Aucun clic enregistré pour le moment.</p>
         <?php endif; ?>
-    </tbody>
-</table>
+    </div>
+
+</div>

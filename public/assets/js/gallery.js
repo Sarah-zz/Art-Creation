@@ -21,21 +21,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Tracking du clic
             const tableauId = card.dataset.id;
+            const tableauTitle = card.dataset.title;
 
             fetch('/track-click', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'tableauId=' + tableauId
+                body: 'tableauId=' + encodeURIComponent(tableauId) +
+                    '&tableauTitle=' + encodeURIComponent(tableauTitle)
             })
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        console.log('Clic enregistré sur ID:', tableauId, 'à', data.clicked_at);
+                        console.log('Clic enregistré sur ID:', tableauId, 'titre:', tableauTitle, 'à', data.clicked_at);
                     } else {
                         console.error('Erreur trackClick:', data.error);
                     }
                 })
                 .catch(err => console.error('Erreur fetch trackClick:', err));
+
         });
     });
 

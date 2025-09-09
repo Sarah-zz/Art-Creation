@@ -25,13 +25,53 @@ class AdminController
     // Dashboard principal
     public function dashboard(): array
     {
+        //Récupérer tous les tableaux (galerie)
         $images = $this->galleryRepo->findAll();
+
+        // récup clics mongo
+        $topClics = [];
+        try {
+            $db = \App\Database\MongoDbConnection::getDatabase();
+            $clicsCollection = $db->selectCollection('clics');
+
+            // Top tableaux les plus cliqués
+            $agg = $clicsCollection->aggregate([
+                [
+                    '$group' => [
+                        '_id' => [
+                            'id' => '$tableau_id',
+                            'title' => '$tableau_title'
+                        ],
+                        'total_clics' => ['$sum' => 1]
+                    ]
+                ],
+                [
+                    '$sort' => ['total_clics' => -1]
+                ],
+                [
+                    '$limit' => 10
+                ]
+            ]);
+
+            foreach ($agg as $item) {
+                $topClics[] = [
+                    'tableau_id' => $item['_id']['id'],
+                    'tableau_title' => $item['_id']['title'] ?? 'Titre inconnu',
+                    'total_clics' => $item['total_clics'] ?? 0
+                ];
+            }
+
+        } catch (\Exception $e) {
+            $topClics = [];
+        }
 
         return [
             'view' => __DIR__ . '/../View/profiladmin.php',
-            'images' => $images
+            'images' => $images,
+            'topClics' => $topClics
         ];
     }
+
 
     // --- AJOUTER UNE IMAGE ---
     public function addGallery(): array
