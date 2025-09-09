@@ -112,7 +112,40 @@ $routes = [
         'view' => null,
         'json' => true
     ],
+
+    // Routes CRUD Galerie
+    'admin/gallery/add' => [
+        'controller' => __DIR__ . '/../src/Controller/AdminController.php',
+        'method' => 'addGallery',
+        'view' => null
+    ],
+    'admin/gallery/edit' => [
+        'controller' => __DIR__ . '/../src/Controller/AdminController.php',
+        'method' => 'editGallery',
+        'view' => null
+    ],
+    'admin/gallery/delete' => [
+        'controller' => __DIR__ . '/../src/Controller/AdminController.php',
+        'method' => 'deleteGallery',
+        'view' => null
+    ],
 ];
+
+//Logique route avec ID
+//gestion edit
+if (preg_match('#^admin/gallery/edit/(\d+)$#', $requestUri, $matches)) {
+    $_GET['id'] = $matches[1];
+    $controller = new \App\Controller\AdminController();
+    $controller->editGallery((int) $_GET['id']);
+    exit;
+}
+//gestion delete
+if (preg_match('#^admin/gallery/delete/(\d+)$#', $requestUri, $matches)) {
+    session_start();
+    $controller = new \App\Controller\AdminController();
+    $controller->deleteGallery((int) $matches[1]);
+    exit;
+}
 
 $matchedRoute = $routes[$requestUri] ?? null;
 $viewToInclude = __DIR__ . '/../src/View/error404.php';
@@ -152,6 +185,7 @@ if ($matchedRoute) {
         } else {
             $viewToInclude = $matchedRoute['view'] ?? $viewToInclude;
         }
+
 
     } else {
         http_response_code(500);
