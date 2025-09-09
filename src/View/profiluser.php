@@ -14,7 +14,7 @@ $userWorkshops = $userWorkshops ?? []; // Evite les warnings
 ?>
 
 <div class="container mt-5">
-    <h1 class="mb-4">Voici vos informations</h1>
+    <h1 class="mb-4">Hello <strong><?= safe($user['pseudo'] ?? '') ?></strong> !</h1>
 
     <?php if ($user): ?>
         <div class="card p-3 shadow-sm mb-4">
@@ -32,7 +32,7 @@ $userWorkshops = $userWorkshops ?? []; // Evite les warnings
             <?php if (!empty($userWorkshops)): ?>
                 <div class="row">
                     <?php foreach ($userWorkshops as $workshop): ?>
-                        <div class="col-12 col-md-6 mb-3">
+                        <div class="col-12 col-md-4 mb-3">
                             <div class="workshop-card p-2 border rounded h-100 d-flex flex-column justify-content-between">
                                 <div>
                                     <p><strong><?= safe($workshop['name'] ?? '') ?></strong></p>

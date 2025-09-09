@@ -1,11 +1,11 @@
 <?php
+// Vérifier si l'utilisateur est connecté
 $isLogged = !empty($_SESSION['user']['id'] ?? null);
 ?>
 <script>
     const isLoggedIn = <?= $isLogged ? 'true' : 'false' ?>;
-    // pour pouvoir utiliser isLoggedIn dans mon workshops.js
+    // Utilisable dans workshops.js
 </script>
-
 
 <h1>Mes ateliers</h1>
 <p>En général, je propose des ateliers un samedi sur deux. Tous niveaux bienvenus, de 3 à 99 ans !</p>
@@ -23,13 +23,15 @@ $isLogged = !empty($_SESSION['user']['id'] ?? null);
                     $description = htmlspecialchars($workshop->getDescription() ?? '');
                     $dateObj = $workshop->getDate();
                     $dateStr = $dateObj ? $dateObj->format('d/m/Y H:i') : '';
-                    $maxPlaces = 10; // fixe 10 max
+                    $maxPlaces = $workshop->getMaxPlaces() ?? 10; // max places
                     $registered = $data['registered'] ?? 0;
+                    $userRegistered = $data['user_registered'] ?? false;
                     ?>
                     <div class="d-flex justify-content-center mb-2">
                         <div class="day px-3 py-2 text-center" data-id="<?= $workshop->getId() ?>" data-name="<?= $name ?>"
                             data-level="<?= $level ?>" data-description="<?= $description ?>" data-date="<?= $dateStr ?>"
-                            data-max="<?= $maxPlaces ?>" data-registered="<?= $registered ?>">
+                            data-max="<?= $maxPlaces ?>" data-registered="<?= $registered ?>"
+                            data-user-registered="<?= $userRegistered ? '1' : '0' ?>">
                             <?= $dateObj ? $dateObj->format('d/m/Y') : '' ?>
                         </div>
                     </div>

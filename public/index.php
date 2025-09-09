@@ -23,8 +23,7 @@ try {
     ]));
 }
 
-// --- Routeur ---
-$basePath = ''; // vide car site accessible via localhost
+// --- Récupération de l'URL demandée ---
 $requestUri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 
 // --- Définition des routes ---
@@ -64,6 +63,12 @@ $routes = [
         'method' => 'profil',
         'view' => null // vue choisie dynamiquement
     ],
+    'admin' => [
+        'controller' => __DIR__ . '/../src/Controller/AdminController.php',
+        'method' => 'dashboard',
+        'view' => null
+    ],
+
     // --- Routes JSON ---
     'register' => [
         'controller' => __DIR__ . '/../src/Controller/UserController.php',
@@ -87,7 +92,7 @@ $routes = [
         'controller' => __DIR__ . '/../src/Controller/GalleryController.php',
         'method' => 'trackClick',
         'view' => null,
-        'json' => true //clics Mongo pour les stats admin
+        'json' => true
     ],
     'toggle-favorite' => [
         'controller' => __DIR__ . '/../src/Controller/GalleryController.php',
@@ -100,19 +105,16 @@ $routes = [
         'method' => 'register',
         'view' => null,
         'json' => true
-    ],'workshops/cancel' => [
-    'controller' => __DIR__ . '/../src/Controller/WorkshopsController.php',
-    'method' => 'cancel',
-    'view' => null,
-    'json' => true
-],
-
-
-
-
+    ],
+    'workshops/cancel' => [
+        'controller' => __DIR__ . '/../src/Controller/WorkshopsController.php',
+        'method' => 'cancel',
+        'view' => null,
+        'json' => true
+    ],
 ];
 
-$matchedRoute = $routes[$requestUri] ?? $routes[''] ?? null;
+$matchedRoute = $routes[$requestUri] ?? null;
 $viewToInclude = __DIR__ . '/../src/View/error404.php';
 $data = [];
 
@@ -128,29 +130,23 @@ if ($matchedRoute) {
 
         // --- Routes JSON ---
         if (!empty($matchedRoute['json'])) {
-            // Nettoyer tout ce qui traîne dans le buffer (warnings, espaces…)
             if (ob_get_length()) {
                 ob_clean();
             }
-
             header('Content-Type: application/json; charset=utf-8');
-
-            // ⚠️ Important : passer $_POST ou [] par défaut
             $result = $controller->$method($_POST ?? []);
-
-            // Encodage JSON propre
             echo json_encode($result, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             exit;
         }
 
-        // --- Routes classiques (pages HTML) ---
+        // --- Pages normales ---
         if ($controllerClass === "\\App\\Controller\\PageController") {
             $data = $controller->$method($requestUri);
         } else {
             $data = $controller->$method();
         }
 
-        // --- Vue dynamique si route view null ---
+        // --- Vue dynamique si précisée ---
         if ($matchedRoute['view'] === null && !empty($data['view'])) {
             $viewToInclude = $data['view'];
         } else {

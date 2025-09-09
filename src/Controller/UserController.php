@@ -105,16 +105,19 @@ class UserController
         }
 
         $user = $_SESSION['user'];
+        $role = $user['role'] ?? 1;
+
+        if ($role == 2) {
+            // Redirection automatique vers le dashboard admin
+            header('Location: /admin');
+            exit;
+        }
+
         $registrationsRepo = new \App\Repository\RegistrationsRepository();
         $userWorkshops = $registrationsRepo->getUserRegistrations($user['id']); // méthode à créer
 
-        $role = $user['role'] ?? 1;
-        $view = ($role == 2)
-            ? __DIR__ . '/../View/profiladmin.php'
-            : __DIR__ . '/../View/profiluser.php';
-
         return [
-            'view' => $view,
+            'view' => __DIR__ . '/../View/profiluser.php',
             'user' => $user,
             'userWorkshops' => $userWorkshops
         ];
