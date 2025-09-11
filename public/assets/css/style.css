@@ -109,7 +109,7 @@ body {
     font-weight: 100;
     text-transform: uppercase;
     padding: 0.6rem 1.2rem;
-    border-radius: 0.3rem;
+    border-radius: 1.5rem;
     transition: background-color 0.3s ease;
 }
 
@@ -311,4 +311,10 @@ body {
 /* Card modale atelier */
 #atelierCard .modal-content {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Ajouter tableau admin */
+.admintab{
+    text-transform: uppercase;
+    font-style: italic;
 }
