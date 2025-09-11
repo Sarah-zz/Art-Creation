@@ -114,7 +114,7 @@ class UserController
         }
 
         $registrationsRepo = new \App\Repository\RegistrationsRepository();
-        $userWorkshops = $registrationsRepo->getUserRegistrations($user['id']); // méthode à créer
+        $userWorkshops = $registrationsRepo->getUserRegistrations($user['id']);
 
         return [
             'view' => __DIR__ . '/../View/profiluser.php',
