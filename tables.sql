@@ -24,7 +24,7 @@ CREATE TABLE workshops (
     level VARCHAR(50),
     description TEXT,
     date DATETIME NOT NULL,
-    max_places INT NOT NUL DEFAULT 10;
+    max_places INT NOT NULL DEFAULT 10;
     duration VARCHAR(20) DEFAULT '3h' NOT NULL
 );
 
