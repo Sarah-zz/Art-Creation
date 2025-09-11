@@ -42,7 +42,7 @@ $routes = [
     'logout' => ['controller' => __DIR__ . '/../src/Controller/UserController.php', 'method' => 'logout', 'json' => true],
     'track-click' => ['controller' => __DIR__ . '/../src/Controller/GalleryController.php', 'method' => 'trackClick', 'json' => true],
     'toggle-favorite' => ['controller' => __DIR__ . '/../src/Controller/GalleryController.php', 'method' => 'toggleFavorite', 'json' => true],
-    
+
     // Inscription à un atelier
     'workshops/register' => [
         'controller' => __DIR__ . '/../src/Controller/WorkshopsController.php',
@@ -54,6 +54,29 @@ $routes = [
     'admin/gallery/add' => ['controller' => __DIR__ . '/../src/Controller/AdminController.php', 'method' => 'addGallery', 'view' => null],
     'admin/gallery/edit' => ['controller' => __DIR__ . '/../src/Controller/AdminController.php', 'method' => 'editGallery', 'view' => null],
     'admin/gallery/delete' => ['controller' => __DIR__ . '/../src/Controller/AdminController.php', 'method' => 'deleteGallery', 'view' => null],
+
+    //Routes CRUD Ateliers
+    'admin/workshops' => [
+        'controller' => __DIR__ . '/../src/Controller/AdminController.php',
+        'method' => 'adminWorkshops',
+        'view' => null
+    ],
+    'admin/workshops/add' => [
+        'controller' => __DIR__ . '/../src/Controller/AdminController.php',
+        'method' => 'addWorkshop',
+        'view' => null
+    ],
+    'admin/workshops/edit' => [
+        'controller' => __DIR__ . '/../src/Controller/AdminController.php',
+        'method' => 'editWorkshop',
+        'view' => null
+    ],
+    'admin/workshops/delete' => [
+        'controller' => __DIR__ . '/../src/Controller/AdminController.php',
+        'method' => 'deleteWorkshop',
+        'view' => null
+    ],
+
 ];
 
 //Gestion des routes avec ID pour edit/delete
@@ -66,6 +89,17 @@ if (preg_match('#^admin/gallery/delete/(\d+)$#', $requestUri, $matches)) {
     $_GET['id'] = $matches[1];
     $requestUri = 'admin/gallery/delete';
 }
+
+if (preg_match('#^admin/workshops/edit/(\d+)$#', $requestUri, $matches)) {
+    $_GET['id'] = $matches[1];
+    $requestUri = 'admin/workshops/edit';
+}
+
+if (preg_match('#^admin/workshops/delete/(\d+)$#', $requestUri, $matches)) {
+    $_GET['id'] = $matches[1];
+    $requestUri = 'admin/workshops/delete';
+}
+
 
 $matchedRoute = $routes[$requestUri] ?? null;
 $viewToInclude = __DIR__ . '/../src/View/error404.php';

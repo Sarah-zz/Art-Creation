@@ -79,7 +79,7 @@ $topClics = $topClics ?? [];
     <!-- Onglet Ateliers -->
 
     <div class="tab-pane fade" id="workshops" role="tabpanel">
-        <p>Gestion des modifications de la page ateliers. Ajouter - Modifier - Supprimer</p>
+        <p>Gestion des ateliers. Ajouter - Modifier - Supprimer</p>
         <div class="mb-3">
             <a href="/admin/workshops/add" class="btn btn-success">Ajouter un nouvel atelier</a>
         </div>
@@ -91,8 +91,7 @@ $topClics = $topClics ?? [];
                     <th>Nom</th>
                     <th>Date</th>
                     <th>Niveau</th>
-                    <th>Places disponibles</th>
-                    <th>Places réservées</th>
+                    <th>Décompte places</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -103,9 +102,8 @@ $topClics = $topClics ?? [];
                             <td><?= htmlspecialchars($w['id']) ?></td>
                             <td><?= htmlspecialchars($w['name']) ?></td>
                             <td><?= htmlspecialchars($w['date']) ?></td>
-                            <td><?= htmlspecialchars($w['level'] ?? '') ?></td>
-                            <td><?= (int) ($w['max_places'] ?? 0) - (int) ($w['registered'] ?? 0) ?></td>
-                            <td><?= (int) ($w['registered'] ?? 0) ?></td>
+                            <td><?= htmlspecialchars($w['level']) ?></td>
+                            <td><?= htmlspecialchars($w['places_display']) ?></td>
                             <td>
                                 <a href="/admin/workshops/edit/<?= $w['id'] ?>" class="btn btn-primary btn-sm">Modifier</a>
                                 <a href="/admin/workshops/delete/<?= $w['id'] ?>" class="btn btn-danger btn-sm"
@@ -121,6 +119,7 @@ $topClics = $topClics ?? [];
             </tbody>
         </table>
     </div>
+
 
     <!-- Onglet Statistiques -->
     <div class="tab-pane fade" id="stats" role="tabpanel">
