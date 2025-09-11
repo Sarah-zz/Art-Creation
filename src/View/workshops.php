@@ -1,10 +1,16 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 // Vérifier si l'utilisateur est connecté
-$isLogged = !empty($_SESSION['user']['id'] ?? null);
+$isLoggedIn = !empty($_SESSION['user']['id'] ?? null);
+$userId = $_SESSION['user']['id'] ?? null;
 ?>
+
 <script>
-    const isLoggedIn = <?= $isLogged ? 'true' : 'false' ?>;
-    // Utilisable dans workshops.js
+    window.isLoggedIn = <?= json_encode($isLoggedIn) ?>;
+    window.userId = <?= json_encode($userId) ?>;
 </script>
 
 <h1>Mes ateliers</h1>
