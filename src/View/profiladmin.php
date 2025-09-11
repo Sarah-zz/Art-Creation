@@ -124,6 +124,8 @@ $topClics = $topClics ?? [];
 
     <!-- Onglet Statistiques -->
     <div class="tab-pane fade" id="stats" role="tabpanel">
+        <p>Ici, un récapitulatif des tableaux sur deux critères. Le premier, tableaux les plus cliqués par les
+            internautes. Le deuxième, classement des tableaux mis en favoris.</p>
         <!-- CLICS -->
         <h3>Tableaux les plus cliqués par les internautes</h3>
         <?php if (!empty($topClics)):
@@ -158,6 +160,7 @@ $topClics = $topClics ?? [];
                 <?php foreach ($topFavorites as $fav):
                     $title = $fav['title'] ?? 'Titre inconnu';
                     $totalFavs = $fav['total_favs'] ?? 0;
+                    $widthPercent = $maxClics > 0 ? ($totalFavs / $maxClics) * 100 : 0;
                     ?>
                     <div class="list-group-item">
                         <div class="d-flex justify-content-between align-items-center mb-1">
@@ -175,6 +178,8 @@ $topClics = $topClics ?? [];
         <?php else: ?>
             <p>Aucun favori enregistré pour le moment.</p>
         <?php endif; ?>
-</div>
+        <br>
+        <br>
+    </div>
 
 </div>
