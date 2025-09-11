@@ -40,7 +40,7 @@ class UserRepository
             $lastname = $user->getLastname();
             $pseudo = $user->getPseudo();
             $email = $user->getEmail();
-            $hashedPassword = password_hash($user->getPassword(), PASSWORD_DEFAULT);
+            $hashedPassword = $user->getPassword();
             $role = $user->getRole();
 
             $stmt->bindParam(':firstname', $firstname);
@@ -73,6 +73,15 @@ class UserRepository
     {
         $stmt = $this->pdo->prepare("SELECT * FROM users WHERE pseudo = :pseudo");
         $stmt->bindParam(':pseudo', $pseudo);
+        $stmt->execute();
+
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $data ? new User($data) : null;
+    }
+    public function getUserById(int $id): ?User
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
         $data = $stmt->fetch(PDO::FETCH_ASSOC);

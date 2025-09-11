@@ -3,36 +3,39 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnInscrire = document.getElementById('btnInscrire');
     const participantsSelect = document.getElementById('participantsSelect');
 
+    // Variable définie côté PHP pour savoir si l'utilisateur est connecté
+    const isLoggedIn = typeof window.isLoggedIn !== 'undefined' ? window.isLoggedIn : false;
+
     document.querySelectorAll('#calendar .day').forEach(day => {
         const maxPlaces = parseInt(day.dataset.max || 10);
         let registered = parseInt(day.dataset.registered || 0);
         let userRegistered = day.dataset.userRegistered === '1';
 
+        // Mise à jour de l'affichage du jour et du bouton
         const updateDayUI = () => {
             const remaining = Math.max(0, maxPlaces - registered);
             const spotsEl = document.getElementById('atelierSpots');
-            spotsEl.innerText = `Il reste ${remaining} place${remaining > 1 ? 's' : ''} sur ${maxPlaces}`;
+            if (spotsEl) spotsEl.innerText = `Il reste ${remaining} place${remaining > 1 ? 's' : ''} sur ${maxPlaces}`;
 
             if (userRegistered) {
                 btnInscrire.className = "btn btn-success";
                 btnInscrire.innerText = "Inscription confirmée !";
                 btnInscrire.disabled = true;
                 day.classList.add('reserved');
-                document.getElementById('atelierDate').style.color = "#999";
-                day.title = "Inscription confirmée !";
+                const dateEl = document.getElementById('atelierDate');
+                if (dateEl) dateEl.style.color = "#999";
             } else {
                 btnInscrire.className = "btn btn-primary";
                 btnInscrire.innerText = "Je participe à l'atelier !";
                 btnInscrire.disabled = false;
-                document.getElementById('atelierDate').style.color = "#000";
-                day.title = "";
+                const dateEl = document.getElementById('atelierDate');
+                if (dateEl) dateEl.style.color = "#000";
             }
         };
 
-        // Initial UI update
+        // Affichage initial si déjà inscrit
         if (isLoggedIn && userRegistered) {
             day.classList.add('reserved');
-            day.title = "Inscription confirmée !";
         }
 
         day.addEventListener('click', () => {
@@ -42,7 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const description = day.dataset.description || "";
             const date = day.dataset.date || "";
 
-            // Remplissage du modal
             document.getElementById('atelierTitle').innerText = titre;
             document.getElementById('atelierLevel').innerText = "Niveau : " + niveau;
             document.getElementById('atelierDesc').innerText = description;
@@ -50,20 +52,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
             updateDayUI();
 
-            // Affiche modal
             const modal = new bootstrap.Modal(atelierCard);
             modal.show();
 
-            // Clic inscription
             btnInscrire.onclick = () => {
                 if (!isLoggedIn) {
-                    const authModal = new bootstrap.Modal(document.getElementById('authModal'));
-                    authModal.show();
+                    // Si pas connecté : afficher le modal de connexion
+                    const authModalEl = document.getElementById('authModal');
+                    if (authModalEl) {
+                        const authModal = new bootstrap.Modal(authModalEl);
+                        authModal.show();
+                    }
                     modal.hide();
                     return;
                 }
 
-                const places = parseInt(participantsSelect.value);
+                // Si connecté : inscription directe
+                const places = parseInt(participantsSelect.value || 1);
 
                 fetch('/workshops/register', {
                     method: 'POST',
@@ -79,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             day.dataset.userRegistered = '1';
                             updateDayUI();
                         } else {
-                            alert("Erreur inscription : " + data.error);
+                            alert("Erreur inscription : " + (data.error || "Impossible d'inscrire"));
                         }
                     })
                     .catch(err => console.error('Erreur fetch inscription:', err));
@@ -87,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Nettoyage URL si redirect
+    // Nettoyage de l'URL après redirect
     if (window.history.replaceState && window.location.search.includes('redirect=')) {
         const cleanURL = window.location.protocol + "//" + window.location.host + window.location.pathname;
         window.history.replaceState(null, null, cleanURL);
