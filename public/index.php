@@ -89,7 +89,11 @@ if ($matchedRoute && file_exists($matchedRoute['controller'])) {
     if ($controllerClass === "\\App\\Controller\\PageController") {
         $data = $controller->$method($requestUri);
     } else {
-        $data = $controller->$method();
+        if (in_array($requestUri, ['admin/gallery/delete', 'admin/gallery/edit'])) {
+            $data = $controller->$method((int) $_GET['id']);
+        } else {
+            $data = $controller->$method();
+        }
     }
 
     //Vue dynamique si précisée
