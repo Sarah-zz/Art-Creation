@@ -42,6 +42,13 @@ $routes = [
     'logout' => ['controller' => __DIR__ . '/../src/Controller/UserController.php', 'method' => 'logout', 'json' => true],
     'track-click' => ['controller' => __DIR__ . '/../src/Controller/GalleryController.php', 'method' => 'trackClick', 'json' => true],
     'toggle-favorite' => ['controller' => __DIR__ . '/../src/Controller/GalleryController.php', 'method' => 'toggleFavorite', 'json' => true],
+    
+    // Inscription à un atelier
+    'workshops/register' => [
+        'controller' => __DIR__ . '/../src/Controller/WorkshopsController.php',
+        'method' => 'register',
+        'json' => true
+    ],
 
     // Routes CRUD Galerie
     'admin/gallery/add' => ['controller' => __DIR__ . '/../src/Controller/AdminController.php', 'method' => 'addGallery', 'view' => null],
