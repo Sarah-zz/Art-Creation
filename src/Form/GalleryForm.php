@@ -14,7 +14,7 @@ $action = $isEdit ? "/admin/gallery/edit/{$image['id']}" : "/admin/gallery/add";
 
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <h4 class="mb-0"><?= $isEdit ? "Modifier l'image" : "Ajouter un nouveau tableau" ?></h4>
+                    <h4 class="mb-0"><?= $isEdit ? "Modifier" : "Ajouter un nouveau tableau" ?></h4>
                 </div>
                 <div class="card-body">
                     <form method="post" action="<?= $action ?>">
