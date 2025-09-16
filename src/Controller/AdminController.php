@@ -162,7 +162,7 @@ class AdminController
         }
 
         return [
-            'view' => __DIR__ . '/../View/admin_workshops.php',
+            'view' => __DIR__ . '/../View/profiladmin.php',
             'workshops' => $workshopsData
         ];
     }
@@ -178,7 +178,7 @@ class AdminController
             $workshop->setDescription($_POST['description'] ?? null);
 
             $this->workshopsRepo->create($workshop);
-            header('Location: /admin/workshops');
+            header('Location: /admin');
             exit;
         }
 
@@ -202,7 +202,7 @@ class AdminController
             $workshop->setDescription($_POST['description'] ?? null);
 
             $this->workshopsRepo->update($workshop);
-            header('Location: /admin/workshops');
+            header('Location: /admin');
             exit;
         }
 
@@ -212,7 +212,7 @@ class AdminController
     public function deleteWorkshop(int $id): void
     {
         $this->workshopsRepo->delete($id);
-        header('Location: /admin/workshops');
+        header('Location: /admin');
         exit;
     }
 }

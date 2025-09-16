@@ -56,27 +56,10 @@ $routes = [
     'admin/gallery/delete' => ['controller' => __DIR__ . '/../src/Controller/AdminController.php', 'method' => 'deleteGallery', 'view' => null],
 
     //Routes CRUD Ateliers
-    'admin/workshops' => [
-        'controller' => __DIR__ . '/../src/Controller/AdminController.php',
-        'method' => 'adminWorkshops',
-        'view' => null
-    ],
-    'admin/workshops/add' => [
-        'controller' => __DIR__ . '/../src/Controller/AdminController.php',
-        'method' => 'addWorkshop',
-        'view' => null
-    ],
-    'admin/workshops/edit' => [
-        'controller' => __DIR__ . '/../src/Controller/AdminController.php',
-        'method' => 'editWorkshop',
-        'view' => null
-    ],
-    'admin/workshops/delete' => [
-        'controller' => __DIR__ . '/../src/Controller/AdminController.php',
-        'method' => 'deleteWorkshop',
-        'view' => null
-    ],
-
+    'admin/workshops' => ['controller' => __DIR__ . '/../src/Controller/AdminController.php', 'method' => 'adminWorkshops', 'view' => null],
+    'admin/workshops/add' => ['controller' => __DIR__ . '/../src/Controller/AdminController.php', 'method' => 'addWorkshop', 'view' => null],
+    'admin/workshops/edit' => ['controller' => __DIR__ . '/../src/Controller/AdminController.php', 'method' => 'editWorkshop', 'view' => null],
+    'admin/workshops/delete' => ['controller' => __DIR__ . '/../src/Controller/AdminController.php', 'method' => 'deleteWorkshop', 'view' => null],
 ];
 
 //Gestion des routes avec ID pour edit/delete
@@ -130,11 +113,19 @@ if ($matchedRoute && file_exists($matchedRoute['controller'])) {
     if ($controllerClass === "\\App\\Controller\\PageController") {
         $data = $controller->$method($requestUri);
     } else {
-        if (in_array($requestUri, ['admin/gallery/delete', 'admin/gallery/edit'])) {
+        if (
+            in_array($requestUri, [
+                'admin/gallery/delete',
+                'admin/gallery/edit',
+                'admin/workshops/delete',
+                'admin/workshops/edit'
+            ])
+        ) {
             $data = $controller->$method((int) $_GET['id']);
         } else {
             $data = $controller->$method();
         }
+
     }
 
     //Vue dynamique si précisée
