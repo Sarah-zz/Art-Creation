@@ -8,6 +8,13 @@ if (empty($_SESSION['user']) || $_SESSION['user']['role'] != 2) {
 // Données passées depuis le controller
 $images = $images ?? [];
 $workshops = $workshops ?? [];
+// Assurer que chaque atelier a une clé 'isPast'
+foreach ($workshops as &$w) {
+    if (!isset($w['isPast'])) {
+        $w['isPast'] = false;
+    }
+}
+unset($w);
 $topClics = $topClics ?? [];
 ?>
 
@@ -77,7 +84,6 @@ $topClics = $topClics ?? [];
     </div>
 
     <!-- Onglet Ateliers -->
-
     <div class="tab-pane fade" id="workshops" role="tabpanel">
         <p>Gestion des ateliers. Ajouter - Modifier - Supprimer</p>
         <div class="mb-3">
@@ -98,27 +104,35 @@ $topClics = $topClics ?? [];
             <tbody>
                 <?php if (!empty($workshops)): ?>
                     <?php foreach ($workshops as $w): ?>
-                        <tr>
+                        <tr class="<?= $w['isPast'] ? '' : '' ?>">
                             <td><?= htmlspecialchars($w['id']) ?></td>
-                            <td><?= htmlspecialchars($w['name']) ?></td>
+                            <td><?= htmlspecialchars($w['name']) ?>         <?= $w['isPast'] ? '(atelier terminé)' : '' ?></td>
                             <td><?= htmlspecialchars($w['date']) ?></td>
                             <td><?= htmlspecialchars($w['level']) ?></td>
-                            <td><?= htmlspecialchars($w['places_display']) ?></td>
+                            <td><?= htmlspecialchars($w['registered']) ?>/<?= htmlspecialchars($w['max_places']) ?></td>
                             <td>
-                                <a href="/admin/workshops/edit/<?= $w['id'] ?>" class="btn btn-primary btn-sm">Modifier</a>
+                                <?php if (!$w['isPast']): ?>
+                                    <a href="/admin/workshops/edit/<?= $w['id'] ?>" class="btn btn-primary btn-sm">Modifier</a>
+                                <?php else: ?>
+                                    <span class="text-secondary fw-bold me-2">Atelier passé</span>
+                                <?php endif; ?>
                                 <a href="/admin/workshops/delete/<?= $w['id'] ?>" class="btn btn-danger btn-sm"
                                     onclick="return confirm('Voulez-vous vraiment supprimer cet atelier ?');">Supprimer</a>
                             </td>
                         </tr>
+
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="7" class="text-center">Aucun atelier disponible.</td>
+                        <td colspan="6" class="text-center">Aucun atelier disponible.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
         </table>
+
     </div>
+
+
 
 
     <!-- Onglet Statistiques -->

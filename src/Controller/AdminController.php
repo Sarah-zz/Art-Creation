@@ -72,20 +72,41 @@ class AdminController
         }
 
         // Ateliers
+        // Ateliers
         $workshops = $this->workshopsRepo->findAll();
         $workshopsData = [];
+
+        $now = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
+
         foreach ($workshops as $w) {
+            $workshopDate = $w->getDate();
+
+            // Conversion vers DateTimeImmutable
+            if ($workshopDate instanceof \DateTimeImmutable) {
+                // rien à faire
+            } elseif ($workshopDate instanceof \DateTime) {
+                $workshopDate = \DateTimeImmutable::createFromMutable($workshopDate);
+            } elseif (is_string($workshopDate)) {
+                $workshopDate = new \DateTimeImmutable($workshopDate, new \DateTimeZone('Europe/Paris'));
+            } else {
+                $workshopDate = $now; // sécurité
+            }
+
+            $isPast = $workshopDate < $now;
             $registered = $this->registrationsRepo->getTotalParticipantsForWorkshop($w->getId());
+
             $workshopsData[] = [
                 'id' => $w->getId(),
                 'name' => $w->getName(),
-                'date' => $w->getDate()->format('Y-m-d H:i'),
+                'date' => $workshopDate->format('Y-m-d H:i'),
                 'level' => $w->getLevel(),
                 'max_places' => $w->getMaxPlaces(),
                 'registered' => $registered,
-                'places_display' => "{$registered}/{$w->getMaxPlaces()}" // <-- ici
+                'places_display' => "{$registered}/{$w->getMaxPlaces()}",
+                'isPast' => $isPast
             ];
         }
+
 
         return [
             'view' => __DIR__ . '/../View/profiladmin.php',
@@ -148,16 +169,40 @@ class AdminController
     // --- CRUD ATELIERS ---
     public function adminWorkshops(): array
     {
-        $workshops = $this->workshopsRepo->findAll();
+        $allWorkshops = $this->workshopsRepo->findAll();
         $workshopsData = [];
-        foreach ($workshops as $w) {
+
+        $now = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
+
+        foreach ($allWorkshops as $w) {
+            // Récupérer la date de l'atelier et la convertir en DateTimeImmutable
+            $workshopDate = $w->getDate();
+            if ($workshopDate instanceof \DateTimeImmutable) {
+                // rien à faire
+            } elseif ($workshopDate instanceof \DateTime) {
+                $workshopDate = \DateTimeImmutable::createFromMutable($workshopDate);
+            } elseif (is_string($workshopDate)) {
+                $workshopDate = new \DateTimeImmutable($workshopDate, new \DateTimeZone('Europe/Paris'));
+            } else {
+                $workshopDate = $now; // sécurité
+            }
+
+            // Vérifier si l'atelier est passé
+            $isPast = $workshopDate < $now;
+
+            // Nombre d’inscrits
+            $registered = $this->registrationsRepo->getTotalParticipantsForWorkshop($w->getId());
+
+            // Construire le tableau de données
             $workshopsData[] = [
                 'id' => $w->getId(),
                 'name' => $w->getName(),
-                'date' => $w->getDate()->format('Y-m-d H:i'),
+                'date' => $workshopDate->format('Y-m-d H:i'),
                 'level' => $w->getLevel(),
                 'max_places' => $w->getMaxPlaces(),
-                'registered' => $this->registrationsRepo->getTotalParticipantsForWorkshop($w->getId())
+                'registered' => $registered,
+                'places_display' => "{$registered}/{$w->getMaxPlaces()}",
+                'isPast' => $isPast
             ];
         }
 
@@ -167,47 +212,81 @@ class AdminController
         ];
     }
 
+
     public function addWorkshop(): array
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $date = $_POST['date'] ?? '';
+            $hour = $_POST['hour'] ?? '10';
+
+            try {
+                $dateTime = new \DateTimeImmutable("$date $hour:00");
+            } catch (\Exception $e) {
+                return [
+                    'view' => __DIR__ . '/../Form/WorkshopForm.php',
+                    'error' => 'Date ou heure invalide.'
+                ];
+            }
+
             $workshop = new \App\Entity\Workshop();
             $workshop->setName($_POST['name'] ?? '');
-            $workshop->setDate(new \DateTimeImmutable($_POST['date'] ?? 'now'));
+            $workshop->setDate($dateTime);
             $workshop->setLevel($_POST['level'] ?? '');
             $workshop->setMaxPlaces((int) ($_POST['max_places'] ?? 0));
             $workshop->setDescription($_POST['description'] ?? null);
 
             $this->workshopsRepo->create($workshop);
-            header('Location: /admin');
+
+            $baseUrl = $_ENV['BASE_URL'] ?? '';
+            header('Location: ' . $baseUrl . '/admin');
             exit;
         }
 
         return ['view' => __DIR__ . '/../Form/WorkshopForm.php'];
     }
 
+
     public function editWorkshop(): array
     {
         $id = (int) ($_GET['id'] ?? 0);
         $workshop = $this->workshopsRepo->findById($id);
+
         if (!$workshop) {
-            header('Location: /admin/workshops');
+            $baseUrl = $_ENV['BASE_URL'] ?? '';
+            header('Location: ' . $baseUrl . '/admin/workshops');
             exit;
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $date = $_POST['date'] ?? '';
+            $hour = $_POST['hour'] ?? '10';
+
+            try {
+                $dateTime = new \DateTimeImmutable("$date $hour:00");
+            } catch (\Exception $e) {
+                return [
+                    'view' => __DIR__ . '/../Form/WorkshopForm.php',
+                    'workshop' => $workshop,
+                    'error' => 'Date ou heure invalide.'
+                ];
+            }
+
             $workshop->setName($_POST['name'] ?? '');
-            $workshop->setDate(new \DateTimeImmutable($_POST['date'] ?? 'now'));
+            $workshop->setDate($dateTime);
             $workshop->setLevel($_POST['level'] ?? '');
             $workshop->setMaxPlaces((int) ($_POST['max_places'] ?? 0));
             $workshop->setDescription($_POST['description'] ?? null);
 
             $this->workshopsRepo->update($workshop);
-            header('Location: /admin');
+
+            $baseUrl = $_ENV['BASE_URL'] ?? '';
+            header('Location: ' . $baseUrl . '/admin');
             exit;
         }
 
         return ['view' => __DIR__ . '/../Form/WorkshopForm.php', 'workshop' => $workshop];
     }
+
 
     public function deleteWorkshop(int $id): void
     {
