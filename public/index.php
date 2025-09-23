@@ -11,9 +11,9 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
 use App\Database\MongoDbConnection;
-// Initialisation MongoDB depuis variables d'environnement
+//Initialisation MongoDB
 try {
-    MongoDbConnection::initializeFromEnv();
+    MongoDbConnection::initialize($_ENV['MONGO_URI'], $_ENV['MONGO_APP_DB']);
 } catch (\Exception $e) {
     http_response_code(500);
     die(json_encode([
@@ -21,6 +21,7 @@ try {
         'errors' => ['Erreur MongoDB : ' . $e->getMessage()]
     ]));
 }
+
 
 //Récupération de l'URL demandée
 $requestUri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
