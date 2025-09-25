@@ -64,6 +64,7 @@ services:
     container_name: artcreation_mongodb 
     ports:
       - "27017:27017"
+      #ancien port 8090:27017
     volumes:
       - mongodb_data:/data/db
     environment:
@@ -71,8 +72,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
 
-
-# Volumes nommés pour la persistance des données / utilité pour la sécurité (live Docker avec Nathan)  ports:"8090:27017"
+# Volumes nommés pour la persistance des données / utilité pour la sécurité (live Docker avec Nathan)
 volumes:
   db_data: # Volume pour stocker les données MySQL
   mongodb_data: # Volume pour MongoDB
