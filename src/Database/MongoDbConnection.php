@@ -10,9 +10,24 @@ class MongoDbConnection
     private static string $databaseName;
 
     // Initialise la connexion MongoDB
-    public static function initialize(string $uri, string $dbName): void
+    public static function initialize(?string $uri = null, ?string $dbName = null): void
     {
         try {
+            // Détection Platform.sh
+            if (getenv('PLATFORM_RELATIONSHIPS')) {
+                $relationships = json_decode(getenv('PLATFORM_RELATIONSHIPS'), true);
+                $mongo = $relationships['mongodb'][0];
+
+                $uri = "mongodb://{$mongo['username']}:{$mongo['password']}@{$mongo['host']}:{$mongo['port']}/{$mongo['path']}";
+                $dbName = $mongo['path'];
+            }
+
+            // Fallback pour dev local
+            if ($uri === null || $dbName === null) {
+                $uri = $uri ?? $_ENV['MONGO_URI'] ?? 'mongodb://root:password@localhost:27017/ma_base';
+                $dbName = $dbName ?? $_ENV['MONGO_DB'] ?? 'ma_base';
+            }
+
             self::$client = new Client($uri);
             self::$databaseName = $dbName;
 

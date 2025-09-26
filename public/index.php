@@ -11,9 +11,11 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
 use App\Database\MongoDbConnection;
-//Initialisation MongoDB
+
+// Initialisation MongoDB
 try {
-    MongoDbConnection::initialize($_ENV['MONGO_URI'], $_ENV['MONGO_APP_DB']);
+    // Sur Platform.sh, les infos sont automatiquement détectées
+    MongoDbConnection::initialize();
 } catch (\Exception $e) {
     http_response_code(500);
     die(json_encode([

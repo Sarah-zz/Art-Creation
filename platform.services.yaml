@@ -1,0 +1,7 @@
+mysql:
+    type: mysql:8.0
+    disk: 50
+
+mongodb:
+    type: mongodb:7.0
+    disk: 50
