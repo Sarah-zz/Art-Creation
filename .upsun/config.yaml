@@ -14,7 +14,14 @@ applications:
       locations:
         "/":
           root: "public"
-          passthru: "/index.php"
+          index: ["index.php"]
+          allow: true
+        "/assets":
+          root: "public/assets"
+          allow: true
+        "/favicon.ico":
+          root: "public"
+          allow: true
 
 services:
   mysql:
