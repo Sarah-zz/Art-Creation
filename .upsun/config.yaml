@@ -1,0 +1,17 @@
+applications:
+  - name: art-creation
+    type: php:8.2
+    build:
+      flavor: composer
+    dependencies:
+      php:
+        ext-mongodb: "*"
+        ext-pdo_mysql: "*"
+    relationships:
+      mysql: "mysql:mysql"
+      mongo: "mongo:mongodb"
+    web:
+      locations:
+        "/":
+          root: "public"
+          passthru: "/index.php"
