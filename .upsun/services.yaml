@@ -1,7 +1,6 @@
-mysql:
-  type: mysql:10.6
-  disk: 512
+services:
+  mysql:
+    type: mysql:10.6
 
-mongo:
-  type: mongodb:5.0
-  disk: 512
+  mongo:
+    type: mongodb:5.0

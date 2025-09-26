@@ -1,12 +1,14 @@
 applications:
-  - name: art-creation
+  art-creation:
     type: php:8.2
+    source:
+      root: public
     build:
       flavor: composer
     dependencies:
       php:
-        ext-mongodb: "*"
         ext-pdo_mysql: "*"
+        ext-mongodb: "*"
     relationships:
       mysql: "mysql:mysql"
       mongo: "mongo:mongodb"
@@ -15,3 +17,19 @@ applications:
         "/":
           root: "public"
           passthru: "/index.php"
+
+services:
+  mysql:
+    type: mysql:10.6
+
+  mongo:
+    type: mongodb:5.0
+
+routes:
+  "https://{default}/":
+    type: upstream
+    upstream: "art-creation:http"
+
+  "https://www.{default}":
+    type: redirect
+    to: "https://{default}/"
