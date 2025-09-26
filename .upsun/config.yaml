@@ -10,10 +10,8 @@ applications:
     dependencies:
       php:
         ext-pdo_mysql: "*"
-        ext-mongodb: "*"
     relationships:
       mysql: "mysql:mysql"
-      mongo: "mongo:mongodb"
     web:
       locations:
         "/":
@@ -23,8 +21,6 @@ applications:
 services:
   mysql:
     type: mysql:10.6
-  mongo:
-    type: mongodb:5.0
 
 routes:
   "https://{default}/":
