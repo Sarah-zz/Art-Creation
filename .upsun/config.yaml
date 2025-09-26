@@ -1,3 +1,5 @@
+# .upsun/config.yaml
+
 applications:
   art-creation:
     type: php:8.2
@@ -21,7 +23,6 @@ applications:
 services:
   mysql:
     type: mysql:10.6
-
   mongo:
     type: mongodb:5.0
 
@@ -29,7 +30,6 @@ routes:
   "https://{default}/":
     type: upstream
     upstream: "art-creation:http"
-
   "https://www.{default}":
     type: redirect
     to: "https://{default}/"

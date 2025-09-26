@@ -1,6 +1,0 @@
-services:
-  mysql:
-    type: mysql:10.6
-
-  mongo:
-    type: mongodb:5.0
