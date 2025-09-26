@@ -1,4 +1,9 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+?>
+<?php
 ob_start();
 
 if (session_status() === PHP_SESSION_NONE) {
@@ -10,19 +15,19 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
-use App\Database\MongoDbConnection;
+// use App\Database\MongoDbConnection;
 
-// Initialisation MongoDB
-try {
-    // Sur Platform.sh, les infos sont automatiquement détectées
-    MongoDbConnection::initialize();
-} catch (\Exception $e) {
-    http_response_code(500);
-    die(json_encode([
-        'success' => false,
-        'errors' => ['Erreur MongoDB : ' . $e->getMessage()]
-    ]));
-}
+// // Initialisation MongoDB
+// try {
+//     // Sur Platform.sh, les infos sont automatiquement détectées
+//     MongoDbConnection::initialize();
+// } catch (\Exception $e) {
+//     http_response_code(500);
+//     die(json_encode([
+//         'success' => false,
+//         'errors' => ['Erreur MongoDB : ' . $e->getMessage()]
+//     ]));
+// }
 
 
 //Récupération de l'URL demandée
