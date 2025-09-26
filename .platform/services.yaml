@@ -1,0 +1,9 @@
+# The services of the project.
+#
+# Each service listed will be deployed
+# to power your Upsun (formerly Platform.sh) project.
+# More information: https://docs.upsun.com/services/
+# Full list of available services: https://docs.upsun.com/services/available/
+mysql:
+  type: mysql:10.6 # All available versions are: 10.6, 10.5, 10.4, 10.3
+  disk: 1024 # All available sizes are: 1024, 2048, 3072, 4096, 5120
