@@ -5,6 +5,6 @@
 # More information: https://docs.upsun.com/services/
 # Full list of available services: https://docs.upsun.com/services/available/
 # relationships
-# db:
-#   type: postgresql:14
-#   disk: 1024
+# Définition minimale de service PHP
+art-creation:
+  type: php:8.2

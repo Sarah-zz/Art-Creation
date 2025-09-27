@@ -1,14 +1,13 @@
-# The routes of the project.
-#
-# Each route describes how an incoming URL is going
-# to be processed by Upsun (formerly Platform.sh).
-# More information: https://docs.upsun.com/routes/
+# Route principale pour toutes les requêtes HTTPS sur le domaine par défaut
+# Le type 'upstream' indique que cette route va pointer vers une application
+# Toutes les requêtes HTTPS sur le domaine principal sont envoyées à l'application 'art-creation' via HTTP
 "https://{default}/":
   type: upstream
   upstream: "art-creation:http"
 
-# A basic redirect definition
-# More information: https://docs.upsun.com/routes/examples/redirect/
+# Redirection de toutes les requêtes HTTPS vers le sous-domaine www vers le domaine sans www
+# Le type 'redirect' indique que c'est une redirection
+# Redirige vers l'URL principale sans 'www'
 "https://www.{default}":
   type: redirect
   to: "https://{default}/"
