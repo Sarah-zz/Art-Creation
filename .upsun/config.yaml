@@ -1,0 +1,27 @@
+applications:
+  art-creation:
+    type: php:8.2
+    source:
+      root: public
+    build:
+      flavor: composer
+    dependencies:
+      php:
+        ext-pdo_mysql: "*"
+    web:
+      locations:
+        "/":
+          root: "public"
+          passthru: "/index.php"
+
+services:
+  mysql:
+    type: mysql:10.6
+
+routes:
+  "https://{default}/":
+    type: upstream
+    upstream: "art-creation:http"
+  "https://www.{default}":
+    type: redirect
+    to: "https://{default}/"
