@@ -8,6 +8,8 @@ applications:
     dependencies:
       php:
         ext-pdo_mysql: "*"
+    relationships:
+      mysql: "mysql:mysql"
     web:
       locations:
         "/":
@@ -17,11 +19,3 @@ applications:
 services:
   mysql:
     type: mysql:10.6
-
-routes:
-  "https://{default}/":
-    type: upstream
-    upstream: "art-creation:http"
-  "https://www.{default}":
-    type: redirect
-    to: "https://{default}/"
