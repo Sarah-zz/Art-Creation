@@ -1,9 +1,14 @@
-# .upsun/config.yaml
 applications:
   art-creation:
-    type: "php:8.2"
+    type: php:8.2
     web:
       locations:
         "/":
           root: "public"
           index: ["index.php"]
+    variables:
+      env:
+        APP_ENV: "prod"
+        APP_DEBUG: "false"
+        MONGO_URI: ""
+        MONGO_APP_DB: ""
