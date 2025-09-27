@@ -1,16 +1,9 @@
 # .upsun/config.yaml
-name: art-creation
-type: php:8.2
-
-# Définition des applications
 applications:
   art-creation:
-    type: php:8.2
+    type: "php:8.2"
     web:
       locations:
         "/":
           root: "public"
           index: ["index.php"]
-
-# Pas de services pour l'instant
-# Pas de routes spécifiques (Upsun générera une route par défaut)
