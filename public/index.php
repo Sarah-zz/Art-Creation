@@ -4,10 +4,22 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Autoloader Composer et variables d'environnement
+// Autoloader Composer
 require_once __DIR__ . '/../vendor/autoload.php';
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
-$dotenv->load();
+
+// --- Chargement des variables d'environnement ---
+// 1. En local : utiliser le fichier .env si présent
+$dotenvPath = __DIR__ . '/../.env';
+if (file_exists($dotenvPath)) {
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+    $dotenv->load();
+} else {
+    // 2. En production : fallback sur les variables d'environnement système
+    $_ENV['APP_ENV'] = getenv('APP_ENV') ?: 'production';
+    $_ENV['APP_DEBUG'] = getenv('APP_DEBUG') ?: false;
+    $_ENV['DATABASE_URL'] = getenv('DATABASE_URL') ?: null;
+
+}
 
 // Récupération de l'URL demandée
 $requestUri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
