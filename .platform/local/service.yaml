@@ -1,4 +1,0 @@
-# .platform/services.yaml
-mysql:
-  type: mysql:8.0
-  disk: 2048
