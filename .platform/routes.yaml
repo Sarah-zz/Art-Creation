@@ -1,14 +1,8 @@
-# Route principale pour toutes les requêtes HTTPS sur le domaine par défaut
-# Le type 'upstream' indique que cette route va pointer vers une application
-# Toutes les requêtes HTTPS sur le domaine principal sont envoyées à l'application 'art-creation' via HTTP
+# .platform/routes.yaml
 "https://{default}/":
     type: upstream
     upstream: "app:http"
 
-
-# Redirection de toutes les requêtes HTTPS vers le sous-domaine www vers le domaine sans www
-# Le type 'redirect' indique que c'est une redirection
-# Redirige vers l'URL principale sans 'www'
-"https://www.{default}":
-  type: redirect
-  to: "https://{default}/"
+"https://{default}/.well-known/acme-challenge/{id}":
+    type: upstream
+    upstream: "app:http"
