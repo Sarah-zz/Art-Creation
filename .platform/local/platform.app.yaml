@@ -1,22 +1,19 @@
 # .platform.app.yaml
 name: art-creation
 type: php:8.2
-disk: 256
-
-web:
-  locations:
-    "/":
-      root: "public"
-      index: ["index.php"]
 
 dependencies:
   php:
-    ext-pdo_mysql: "*"
+    composer/composer: '^2'
 
 relationships:
-  mysql: "mysql:mysql"
+  mysql: 'mysql:mysql'
 
-# Services (MySQL uniquement pour le moment)
-services:
-  mysql:
-    type: mysql:10.6
+web:
+  locations:
+    '/':
+      root: 'public'
+      index: ['index.php']
+      passthru: '/index.php'
+
+disk: 2048
