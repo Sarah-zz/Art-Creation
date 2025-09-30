@@ -6,6 +6,7 @@ applications:
         "/":
           root: "public"
           index: ["index.php"]
+          passthru: "/index.php"
     variables:
       env:
         APP_ENV: "prod"
