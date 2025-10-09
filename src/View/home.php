@@ -9,7 +9,8 @@
         <div class="col-md-6">
             <p>Je suis Lya, artiste peintre.</p>
             <p>Mes œuvres explorent la couleur, la matière et les émotions, invitant chacun à un voyage sensoriel unique.</p>
-            <p>Je propose aussi des ateliers de peinture pour adultes et enfants, pour partager ma passion et voir chacun exprimer sa créativité librement.</p>
+            <p>Je propose aussi des ateliers de peinture pour adultes et enfants, pour partager ma passion et voir chacun exprimer 
+                sa créativité librement.</p>
             <a href="<?= htmlspecialchars($buttonLink) ?>" class="btn btn-footer mt-3">
                 <?= htmlspecialchars($buttonLabel) ?>
             </a>
