@@ -1,0 +1,14 @@
+# The services of the project.
+#
+# Each service listed will be deployed
+# to power your Upsun (formerly Platform.sh) project.
+# More information: https://docs.upsun.com/services/
+# Full list of available services: https://docs.upsun.com/services/available/
+# relationships
+# Définition minimale de service PHP
+art-creation:
+  type: php:8.2
+
+mysql:
+    type: mysql:8.0
+    disk: 1024

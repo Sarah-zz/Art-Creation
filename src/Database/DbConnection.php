@@ -1,6 +1,4 @@
 <?php
-// Classe Singleton pour gérer la connexion à la base de données en utilisant des variables d'environnement.
-
 namespace App\Database;
 
 use PDO;
@@ -14,15 +12,28 @@ class DbConnection
     private function __construct()
     {
         try {
-            $dsn = $_ENV['DB_DSN'];
-            $user = $_ENV['DB_USER'];
-            $password = $_ENV['DB_PASSWORD'];
+            // Récupérer les infos de la base depuis Platform.sh
+            if (getenv('PLATFORM_RELATIONSHIPS')) {
+                $relationships = json_decode(getenv('PLATFORM_RELATIONSHIPS'), true);
+                $mysql = $relationships['mysql'][0];
+
+                $dsn = "mysql:host={$mysql['host']};dbname={$mysql['path']}";
+                $user = $mysql['username'];
+                $password = $mysql['password'];
+            } else {
+                // Fallback pour dev local ou Docker classique
+                $dsn = $_ENV['DB_DSN'] ?? 'mysql:host=localhost;dbname=ma_base';
+                $user = $_ENV['DB_USER'] ?? 'root';
+                $password = $_ENV['DB_PASSWORD'] ?? '';
+            }
 
             self::$pdo = new PDO($dsn, $user, $password);
+            self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
         } catch (PDOException $e) {
             die('Erreur de connexion à la base de données : ' . $e->getMessage());
         } catch (\Exception $e) {
-            die('Erreur de configuration de la base de données : ' . $e->getMessage() . ' (Vérifiez votre fichier .env et son chargement dans public/index.php).');
+            die('Erreur de configuration de la base de données : ' . $e->getMessage());
         }
     }
 
