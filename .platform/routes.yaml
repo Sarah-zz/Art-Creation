@@ -1,8 +1,0 @@
-# .platform/routes.yaml
-"https://{default}/":
-    type: upstream
-    upstream: "app:http"
-
-"https://{default}/.well-known/acme-challenge/{id}":
-    type: upstream
-    upstream: "app:http"
