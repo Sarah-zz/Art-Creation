@@ -1,58 +1,14 @@
 <?php
 ob_start();
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Autoloader Composer
+//Autoloader Composer et variables d'environnement
 require_once __DIR__ . '/../vendor/autoload.php';
-
-// --- Chargement des variables d'environnement ---
-$dotenvPath = __DIR__ . '/../.env';
-if (file_exists($dotenvPath)) {
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
-    $dotenv->load();
-} else {
-    // Production Platform.sh
-    $_ENV['APP_ENV'] = getenv('APP_ENV') ?: 'production';
-    $_ENV['APP_DEBUG'] = getenv('APP_DEBUG') ?: false;
-    $_ENV['DATABASE_URL'] = getenv('DATABASE_URL') ?: null;
-}
-
-// --- Connexion MySQL automatique Platform.sh / local ---
-$dbHost = $dbPort = $dbName = $dbUser = $dbPass = null;
-
-if (getenv('PLATFORM_RELATIONSHIPS')) {
-    $relationships = json_decode(base64_decode(getenv('PLATFORM_RELATIONSHIPS')), true);
-    if (isset($relationships['database'][0])) {
-        $db = $relationships['database'][0];
-        $dbHost = $db['host'];
-        $dbPort = $db['port'];
-        $dbName = ltrim($db['path'], '/');
-        $dbUser = $db['username'];
-        $dbPass = $db['password'];
-    }
-} elseif (isset($_ENV['DATABASE_URL'])) {
-    $parts = parse_url($_ENV['DATABASE_URL']);
-    $dbHost = $parts['host'] ?? '127.0.0.1';
-    $dbPort = $parts['port'] ?? 3306;
-    $dbName = ltrim($parts['path'], '/');
-    $dbUser = $parts['user'] ?? 'root';
-    $dbPass = $parts['pass'] ?? '';
-}
-
-try {
-    if ($dbHost && $dbName) {
-        $pdo = new PDO(
-            "mysql:host={$dbHost};port={$dbPort};dbname={$dbName};charset=utf8mb4",
-            $dbUser,
-            $dbPass,
-            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]
-        );
-    }
-} catch (PDOException $e) {
-    die("Erreur de connexion à la base de données : " . $e->getMessage());
-}
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
 
 // --- Récupération de l'URL demandée ---
 $requestUri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');

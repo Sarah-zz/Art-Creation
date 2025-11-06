@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Repository\GalleryRepository;
 use App\Repository\FavoritesRepository;
 use App\Entity\Favorite;
-use App\Database\MongoDbConnection;
+// use App\Database\MongoDbConnection;
 
 class GalleryController
 {
@@ -60,37 +60,37 @@ class GalleryController
     }
 
     // --- Track clic sur un tableau (MongoDB) ---
-    public function trackClick(array $postData): array
-    {
-        $tableauId = $postData['tableauId'] ?? null;
-        $tableauTitle = $postData['tableauTitle'] ?? null;
+    // public function trackClick(array $postData): array
+    // {
+    //     $tableauId = $postData['tableauId'] ?? null;
+    //     $tableauTitle = $postData['tableauTitle'] ?? null;
 
-        if (!$tableauId) {
-            http_response_code(400);
-            return ['success' => false, 'error' => 'tableauId manquant'];
-        }
+    //     if (!$tableauId) {
+    //         http_response_code(400);
+    //         return ['success' => false, 'error' => 'tableauId manquant'];
+    //     }
 
-        try {
-            $db = MongoDbConnection::getDatabase();
-            $clicsCollection = $db->selectCollection('clics');
+    //     try {
+    //         $db = MongoDbConnection::getDatabase();
+    //         $clicsCollection = $db->selectCollection('clics');
 
-            $date = (new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')))->format(DATE_ATOM);
+    //         $date = (new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')))->format(DATE_ATOM);
 
-            $clicsCollection->insertOne([
-                'tableau_id' => (int) $tableauId,
-                'tableau_title' => $tableauTitle,
-                'date' => $date
-            ]);
+    //         $clicsCollection->insertOne([
+    //             'tableau_id' => (int) $tableauId,
+    //             'tableau_title' => $tableauTitle,
+    //             'date' => $date
+    //         ]);
 
-            return [
-                'success' => true,
-                'clicked_at' => $date
-            ];
+    //         return [
+    //             'success' => true,
+    //             'clicked_at' => $date
+    //         ];
 
-        } catch (\Exception $e) {
-            http_response_code(500);
-            return ['success' => false, 'error' => $e->getMessage()];
-        }
-    }
+    //     } catch (\Exception $e) {
+    //         http_response_code(500);
+    //         return ['success' => false, 'error' => $e->getMessage()];
+    //     }
+    // }
 
 }

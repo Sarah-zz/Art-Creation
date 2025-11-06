@@ -11,17 +11,17 @@ services:
       - "9000:9000"
     depends_on:
       - db
-      - mongodb
+      # - mongodb
     environment:
       MYSQL_HOST: db
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       # MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
-      MONGO_HOST: mongodb
-      MONGO_PORT: 27017
-      MONGO_DATABASE: ${MONGO_APP_DB}
-      MONGO_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      # MONGO_HOST: mongodb
+      # MONGO_PORT: 27017
+      # MONGO_DATABASE: ${MONGO_APP_DB}
+      # MONGO_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      # MONGO_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
 
   # Service du serveur web (Nginx)
   web:
@@ -59,19 +59,19 @@ services:
     depends_on:
       - db
 
-  mongodb:
-    image: mongo:7.0.9
-    container_name: artcreation_mongodb 
-    ports:
-      - "8090:27017"
-    volumes:
-      - mongodb_data:/data/db
-    environment:
-      MONGO_INITDB_DATABASE: ${MONGO_APP_DB}
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+  # mongodb:
+  #   image: mongo:7.0.9
+  #   container_name: artcreation_mongodb 
+  #   ports:
+  #     - "8090:27017"
+  #   volumes:
+  #     - mongodb_data:/data/db
+  #   environment:
+  #     MONGO_INITDB_DATABASE: ${MONGO_APP_DB}
+  #     MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+  #     MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
 
 # Volumes nommés pour la persistance des données / utilité pour la sécurité (live Docker avec Nathan)
 volumes:
   db_data: # Volume pour stocker les données MySQL
-  mongodb_data: # Volume pour MongoDB
+  # mongodb_data: # Volume pour MongoDB

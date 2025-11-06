@@ -11,9 +11,8 @@ RUN apk add --no-cache \
 
 # Installer extensions PHP : MySQL + MongoDB + ZIP
 RUN docker-php-ext-install pdo_mysql zip \
-    && pecl install mongodb-2.1.4 \
-    && docker-php-ext-enable mongodb
-
+    # && pecl install mongodb-2.1.4 \
+    # && docker-php-ext-enable mongodb
 # Installer Composer
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
