@@ -29,10 +29,11 @@ services:
     image: nginx:alpine
     container_name: artcreation_web 
     ports:
-      - "8080:80"
+      - "80:80"
+      # expose le port 80 pour HTTP
     volumes:
       - .:/var/www/html
-      - ./nginx:/etc/nginx/conf.d:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - app
 
