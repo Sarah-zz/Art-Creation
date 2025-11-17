@@ -1,0 +1,40 @@
+services:
+  # Service de l'application PHP (PHP-FPM)
+  - name: artcreation-app
+    type: web
+    runtime: docker
+    plan: free
+    envVars:
+      - key: MYSQL_HOST
+        value: artcreation-db
+      - key: MYSQL_DATABASE
+        value: ${MYSQL_DATABASE}
+      - key: MYSQL_USER
+        value: ${DB_USER}
+      - key: MYSQL_PASSWORD
+        value: ${DB_PASSWORD}
+      - key: RENDER_SITE_URL
+        value: https://art-creation.onrender.com
+
+  # Service de la base de données MySQL
+  - name: artcreation-db
+    type: web  # Utiliser le type web même pour la base de données
+    runtime: docker  # Toujours utiliser docker pour le déploiement
+    envVars:
+      - key: MYSQL_ROOT_PASSWORD
+        value: ${DB_PASSWORD}
+      - key: MYSQL_DATABASE
+        value: ${MYSQL_DATABASE}
+
+  # Service phpMyAdmin
+  - name: artcreation-phpmyadmin
+    type: web
+    runtime: docker
+    envVars:
+      - key: PMA_HOST
+        value: artcreation-db
+      - key: PMA_USER
+        value: ${DB_USER}
+      - key: PMA_PASSWORD
+        value: ${DB_PASSWORD}
+    plan: free
