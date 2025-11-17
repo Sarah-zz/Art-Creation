@@ -22,6 +22,7 @@ services:
       # MONGO_DATABASE: ${MONGO_APP_DB}
       # MONGO_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       # MONGO_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      RENDER_SITE_URL: https://art-creation.onrender.com
 
   # Service du serveur web (Nginx)
   web:
