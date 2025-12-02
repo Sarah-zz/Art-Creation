@@ -1,11 +1,11 @@
 INSERT INTO users (firstname, lastname, pseudo, email, password, role)
-VALUES ('Lya', 'De Souza', 'admin', 'admin@example.com', '$2y$10$4xqwy6vRZsJvU4LflpWPUen3RK1NzjEMvbfhrPC.jEqsytMYB2qFu
+VALUES ('Lya', 'De Souza', 'admin', 'admin@example.com', '$2y$10$vkOUOvj7kxSz.3DvMmEKBetvGYhU9frHQrj02UCQPT6wje4OUupki
 ', 2);
 
 -- mot de passe : LyaAdmin123! --
 
 INSERT INTO users (firstname, lastname, pseudo, email, password, role)
-VALUES ('Studi', 'Studi', 'studitest12', 'employee@example.com', '$2y$10$M6.SuR4wMOEZ1G6uDZl7CuYL5zb.leX82LxdRPoWAIpIDYftNPmkO
+VALUES ('Studi', 'Studi', 'studitest12', 'user@example.com', '$2y$10$gwM5vPrbSjI2RpKOuq4XhuIx21J1AO2rhI8FYSgBXnEiVm.0cvf8.
 ', 1);
 
 -- mot de passe : Studi26320! --
