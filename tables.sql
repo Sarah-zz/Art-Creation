@@ -1,5 +1,7 @@
 CREATE DATABASE artcreation_db;
 
+USE artcreation_db;
+
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     firstname VARCHAR(100) NOT NULL,
@@ -7,7 +9,7 @@ CREATE TABLE users (
     pseudo VARCHAR(100) NOT NULL UNIQUE,
     email VARCHAR(150) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    role INT DEFAULT 1 NOT NULL -- 1 = user, 2 = admin
+    role INT NOT NULL DEFAULT 1 -- 1 = user, 2 = admin
 );
 
 CREATE TABLE gallery (
@@ -24,8 +26,8 @@ CREATE TABLE workshops (
     level VARCHAR(50),
     description TEXT,
     date DATETIME NOT NULL,
-    max_places INT NOT NULL DEFAULT 10;
-    duration VARCHAR(20) DEFAULT '3h' NOT NULL
+    max_places INT NOT NULL DEFAULT 10,
+    duration VARCHAR(20) NOT NULL DEFAULT '3h'
 );
 
 CREATE TABLE favorites (
