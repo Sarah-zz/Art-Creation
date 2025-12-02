@@ -13,7 +13,7 @@ $dotenv->load();
 use App\Database\MongoDbConnection;
 //Initialisation MongoDB
 try {
-    MongoDbConnection::initialize($_ENV['MONGO_URI'], $_ENV['MONGO_APP_DB']);
+    MongoDbConnection::initialize();
 } catch (\Exception $e) {
     http_response_code(500);
     die(json_encode([

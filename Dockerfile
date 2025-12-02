@@ -3,21 +3,21 @@ FROM php:8.2-fpm-alpine
 
 WORKDIR /var/www/html
 
-# Installer dépendances système nécessaires
+# Installer dépendances système nécessaires pour PECL + extensions PHP
 RUN apk add --no-cache \
-    autoconf g++ make pkgconfig \
+    autoconf g++ make pkgconfig libtool \
     curl-dev openssl-dev libxml2-dev libzip-dev \
     mysql-client git unzip
 
-# Installer extensions PHP : MySQL + MongoDB + ZIP
+# Installer extensions PHP : MySQL + ZIP + MongoDB
 RUN docker-php-ext-install pdo_mysql zip \
-    && pecl install mongodb-2.1.4 \
+    && pecl install mongodb-1.17.1 \
     && docker-php-ext-enable mongodb
 
 # Installer Composer
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
-# Copier uniquement les fichiers Composer d'abord (pour le cache)
+# Copier uniquement les fichiers Composer d'abord pour optimiser le cache
 COPY composer.json composer.lock ./
 
 # Installer les dépendances PHP
