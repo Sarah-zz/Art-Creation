@@ -6,6 +6,18 @@ if (session_status() === PHP_SESSION_NONE) {
 // Vérifier si l'utilisateur est connecté
 $isLoggedIn = !empty($_SESSION['user']['id'] ?? null);
 $userId = $_SESSION['user']['id'] ?? null;
+
+// Filtrer les ateliers pour ne garder que ceux dont la date est future
+$now = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
+foreach ($workshopsByMonth as $monthName => &$workshops) {
+    $workshops = array_filter($workshops, function ($data) use ($now) {
+        $date = $data['workshop']->getDate();
+        return $date && $date >= $now;
+    });
+}
+// Supprimer les mois vides
+$workshopsByMonth = array_filter($workshopsByMonth);
+unset($workshops);
 ?>
 
 <script>
@@ -29,7 +41,7 @@ $userId = $_SESSION['user']['id'] ?? null;
                     $description = htmlspecialchars($workshop->getDescription() ?? '');
                     $dateObj = $workshop->getDate();
                     $dateStr = $dateObj ? $dateObj->format('d/m/Y H:i') : '';
-                    $maxPlaces = $workshop->getMaxPlaces() ?? 10; // max places
+                    $maxPlaces = $workshop->getMaxPlaces() ?? 10;
                     $registered = $data['registered'] ?? 0;
                     $userRegistered = $data['user_registered'] ?? false;
                     ?>

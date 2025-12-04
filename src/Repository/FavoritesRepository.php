@@ -54,10 +54,18 @@ class FavoritesRepository
     // Récupère les favoris d’un utilisateur
     public function getUserFavorites(int $userId): array
     {
-        $stmt = $this->pdo->prepare("SELECT gallery_id FROM favorites WHERE user_id = :user_id");
+        $sql = "SELECT g.id, g.title, g.image, g.description
+            FROM favorites f
+            INNER JOIN gallery g ON f.gallery_id = g.id
+            WHERE f.user_id = :user_id";
+
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['user_id' => $userId]);
-        return $stmt->fetchAll(\PDO::FETCH_COLUMN);
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+
 
     //Prépare les stats admin
     public function countFavoritesByGallery(): array

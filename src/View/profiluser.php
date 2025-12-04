@@ -24,37 +24,54 @@ $userWorkshops = $userWorkshops ?? []; // Evite les warnings
             <p><strong>Email :</strong> <?= safe($user['email'] ?? '') ?></p>
         </div>
 
-        <div class="mt-4">
-            <h4>Vos favoris</h4>
-            <p><em>(wip : liste des tableaux mis en favoris)</em></p>
-
-            <h4 class="mt-3">Vos ateliers</h4>
-            <?php if (!empty($userWorkshops)): ?>
-                <div class="row">
-                    <?php foreach ($userWorkshops as $workshop): ?>
-                        <div class="col-12 col-md-4 mb-3">
-                            <div class="workshop-card p-2 border rounded h-100 d-flex flex-column justify-content-between">
-                                <div>
-                                    <p><strong><?= safe($workshop['name'] ?? '') ?></strong></p>
-                                    <p><?= safe($workshop['date'] ?? '') ?> Durée : 3h</p>
-                                    <p id="spots-<?= (int) ($workshop['workshop_id'] ?? 0) ?>">
-                                        Nombre de participants réservés : <?= (int) ($workshop['participants'] ?? 0) ?>
-                                    </p>
-                                </div>
-                                <button class="btn btn-outline-danger btn-cancel mt-2"
-                                    data-workshop-id="<?= (int) ($workshop['workshop_id'] ?? 0) ?>">
-                                    Annuler ma réservation
-                                </button>
+        <h4>Vos favoris</h4>
+        <?php if (!empty($favorites)): ?>
+            <div class="row">
+                <?php foreach ($favorites as $fav): ?>
+                    <div class="col-6 col-md-3 mb-3"> <!-- plus petit qu'avant -->
+                        <div class="card p-1 shadow-sm h-100 text-center">
+                            <img src="<?= htmlspecialchars($fav['image']) ?>" class="card-img-top img-thumbnail"
+                                alt="<?= htmlspecialchars($fav['title']) ?>" style="height:120px; object-fit:cover;">
+                            <div class="card-body p-2">
+                                <h6 class="card-title mb-1"><?= htmlspecialchars($fav['title']) ?></h6>
+                                <p class="card-text small mb-0"><?= htmlspecialchars($fav['description']) ?></p>
                             </div>
                         </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php else: ?>
-                <p>Vous n’avez aucune inscription pour le moment.</p>
-            <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p>Vous n’avez aucun favori pour le moment.</p>
+        <?php endif; ?>
 
-        </div>
-    <?php else: ?>
-        <p>Vous devez être connecté pour voir vos informations.</p>
-    <?php endif; ?>
+
+        <h4 class="mt-3">Vos ateliers</h4>
+        <?php if (!empty($userWorkshops)): ?>
+            <div class="row">
+                <?php foreach ($userWorkshops as $workshop): ?>
+                    <div class="col-12 col-md-4 mb-3">
+                        <div class="workshop-card p-2 border rounded h-100 d-flex flex-column justify-content-between">
+                            <div>
+                                <p><strong><?= safe($workshop['name'] ?? '') ?></strong></p>
+                                <p><?= safe($workshop['date'] ?? '') ?> Durée : 3h</p>
+                                <p id="spots-<?= (int) ($workshop['workshop_id'] ?? 0) ?>">
+                                    Nombre de participants réservés : <?= (int) ($workshop['participants'] ?? 0) ?>
+                                </p>
+                            </div>
+                            <button class="btn btn-outline-danger btn-cancel mt-2"
+                                data-workshop-id="<?= (int) ($workshop['workshop_id'] ?? 0) ?>">
+                                Annuler ma réservation
+                            </button>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p>Vous n’avez aucune inscription pour le moment.</p>
+        <?php endif; ?>
+
+    </div>
+<?php else: ?>
+    <p>Vous devez être connecté pour voir vos informations.</p>
+<?php endif; ?>
 </div>

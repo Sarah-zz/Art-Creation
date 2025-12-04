@@ -82,12 +82,17 @@ class UserController
             exit;
         }
 
+        $userId = (int) $userSession['id'];
         $profileData = $this->userService->getUserProfile((int) $userSession['id']);
+
+        $favoritesRepo = new \App\Repository\FavoritesRepository();
+        $userFavorites = $favoritesRepo->getUserFavorites($userId);
 
         return [
             'view' => __DIR__ . '/../View/profiluser.php',
             'user' => $profileData['user'] ?? [],
-            'userWorkshops' => $profileData['userWorkshops'] ?? []
+            'userWorkshops' => $profileData['userWorkshops'] ?? [],
+            'favorites' => $userFavorites
         ];
     }
 

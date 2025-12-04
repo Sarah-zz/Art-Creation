@@ -1,15 +1,20 @@
 <?php
 $images = $data['images'] ?? [];
+$favorites = $data['favorites'] ?? []; // IDs ou tableau associatif des favoris de l'utilisateur
 $isLogged = !empty($_SESSION['user']['id'] ?? null);
-?>
 
+// Si $favorites contient des tableaux complets (id, title, ...), on extrait juste les IDs
+$favIds = array_column($favorites, 'id');
+?>
 
 <div class="container mt-4 gallery-space">
     <h1 class="text-center mb-5">Galerie</h1>
 
     <div class="row g-4">
         <?php if (!empty($images)): ?>
-            <?php foreach ($images as $img): ?>
+            <?php foreach ($images as $img):
+                $isFavorite = in_array($img['id'], $favIds);
+                ?>
                 <div class="col-md-4 d-flex">
                     <div class="card gallery-card img-clickable h-100 w-100" data-id="<?= htmlspecialchars($img['id']) ?>"
                         data-title="<?= htmlspecialchars($img['title']) ?>"
@@ -23,8 +28,8 @@ $isLogged = !empty($_SESSION['user']['id'] ?? null);
 
                         <div class="card-body text-center position-relative">
                             <h5 class="card-title mb-0"><?= htmlspecialchars($img['title']) ?></h5>
-                            <?php if (!empty($_SESSION['user'])): ?>
-                                <span class="heart-icon <?= in_array($img['id'], $favorites) ? 'favorited' : '' ?>"
+                            <?php if ($isLogged): ?>
+                                <span class="heart-icon <?= $isFavorite ? 'favorited' : '' ?>"
                                     data-image-id="<?= htmlspecialchars($img['id']) ?>">♥</span>
                             <?php endif; ?>
                         </div>

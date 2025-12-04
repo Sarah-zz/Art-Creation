@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
                 .then(resp => resp.json())
                 .then(data => {
-                    console.log(data); // debug : voir la réponse
+                    console.log(data);
                     if (data.success) {
                         btn.className = 'btn btn-secondary';
                         btn.innerText = 'Réservation annulée';
