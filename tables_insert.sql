@@ -1,14 +1,15 @@
 INSERT INTO users (firstname, lastname, pseudo, email, password, role)
-VALUES ('Lya', 'De Souza', 'admin', 'admin@example.com', '$2y$10$vkOUOvj7kxSz.3DvMmEKBetvGYhU9frHQrj02UCQPT6wje4OUupki
-', 2);
+VALUES ('Lya','De Souza','admin','admin@example.com','$2b$12$ChVcBTM3tQGH5GwMGpvz1e2fCuHIppP5JlDJx/rH828D/8ckUBsky',2
+);
 
 -- mot de passe : LyaAdmin123! --
 
 INSERT INTO users (firstname, lastname, pseudo, email, password, role)
-VALUES ('Studi', 'Studi', 'studitest12', 'user@example.com', '$2y$10$gwM5vPrbSjI2RpKOuq4XhuIx21J1AO2rhI8FYSgBXnEiVm.0cvf8.
-', 1);
+VALUES ('Studi','Studi','studitest12','user@example.com','$2b$12$y2OLOKqGZn8KO9FhBgEnD.wP5kFs8ArTd4lLDrQrPKGIuYHE7uxRK',1
+);
 
 -- mot de passe : Studi26320! --
+
 
 INSERT INTO gallery (title, image, description, size) VALUES
 ('Red', 'https://cdn.pixabay.com/photo/2021/06/02/21/37/abstract-6305508_1280.jpg', 'Tableau abstrait rouge', '1024x768'),

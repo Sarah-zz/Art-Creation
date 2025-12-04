@@ -63,10 +63,11 @@ services:
     image: mongo:7.0.9
     container_name: artcreation_mongodb 
     ports:
-      - "8090:27017"
+      - "27017:27017"
     volumes:
       - mongodb_data:/data/db
     environment:
+      MONGO_URI: ${MONGO_URI}
       MONGO_INITDB_DATABASE: ${MONGO_APP_DB}
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}

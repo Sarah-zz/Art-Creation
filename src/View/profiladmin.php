@@ -139,11 +139,19 @@ $topClics = $topClics ?? [];
     <div class="tab-pane fade" id="stats" role="tabpanel">
         <p>Ici, un récapitulatif des tableaux sur deux critères. Le premier, tableaux les plus cliqués par les
             internautes. Le deuxième, classement des tableaux mis en favoris.</p>
+
+        <?php
+        $topClics = $topClics ?? [];
+        $topFavorites = $topFavorites ?? [];
+
+        // Valeurs maximales sécurisées
+        $maxClics = !empty($topClics) ? max(array_column($topClics, 'total_clics')) : 0;
+        $maxFavs = !empty($topFavorites) ? max(array_column($topFavorites, 'total_favs')) : 0;
+        ?>
+
         <!-- CLICS -->
         <h3>Tableaux les plus cliqués par les internautes</h3>
-        <?php if (!empty($topClics)):
-            $maxClics = max(array_column($topClics, 'total_clics'));
-            ?>
+        <?php if (!empty($topClics)): ?>
             <div class="list-group mt-3">
                 <?php foreach ($topClics as $clic):
                     $title = $clic['tableau_title'] ?? 'Titre inconnu';
@@ -152,7 +160,7 @@ $topClics = $topClics ?? [];
                     ?>
                     <div class="list-group-item">
                         <div class="d-flex justify-content-between align-items-center mb-1">
-                            <span><?= htmlspecialchars($clic['tableau_title']) ?></span>
+                            <span><?= htmlspecialchars($title) ?></span>
                             <span class="badge bg-warning"><?= $totalClics ?> clic<?= $totalClics > 1 ? 's' : '' ?></span>
                         </div>
                         <div class="progress" style="height: 20px;">
@@ -164,7 +172,9 @@ $topClics = $topClics ?? [];
             </div>
         <?php else: ?>
             <p>Aucun clic enregistré pour le moment.</p>
-        <?php endif; ?><br>
+        <?php endif; ?>
+
+        <br>
 
         <!-- FAVORIS -->
         <h3>Top des tableaux mis en favoris</h3>
@@ -173,7 +183,7 @@ $topClics = $topClics ?? [];
                 <?php foreach ($topFavorites as $fav):
                     $title = $fav['title'] ?? 'Titre inconnu';
                     $totalFavs = $fav['total_favs'] ?? 0;
-                    $widthPercent = $maxClics > 0 ? ($totalFavs / $maxClics) * 100 : 0;
+                    $widthPercent = $maxFavs > 0 ? ($totalFavs / $maxFavs) * 100 : 0;
                     ?>
                     <div class="list-group-item">
                         <div class="d-flex justify-content-between align-items-center mb-1">
@@ -182,8 +192,7 @@ $topClics = $topClics ?? [];
                         </div>
                         <div class="progress" style="height: 20px;">
                             <div class="progress-bar bg-danger" role="progressbar" style="width: <?= $widthPercent ?>%;"
-                                aria-valuenow="<?= $totalFavs ?>" aria-valuemin="0" aria-valuemax="<?= $maxFavs ?>">
-                            </div>
+                                aria-valuenow="<?= $totalFavs ?>" aria-valuemin="0" aria-valuemax="<?= $maxFavs ?>"></div>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -191,8 +200,8 @@ $topClics = $topClics ?? [];
         <?php else: ?>
             <p>Aucun favori enregistré pour le moment.</p>
         <?php endif; ?>
-        <br>
-        <br>
+
+        <br><br>
     </div>
 
 </div>

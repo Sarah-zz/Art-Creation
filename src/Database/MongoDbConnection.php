@@ -21,9 +21,9 @@ class MongoDbConnection
         // Récupération des paramètres depuis les variables d'environnement
         $host = getenv('MONGO_HOST') ?: 'mongodb';
         $port = getenv('MONGO_PORT') ?: '27017';
-        $dbName = getenv('MONGO_DATABASE') ?: 'test';
-        $username = getenv('MONGO_USERNAME') ?: null;
-        $password = getenv('MONGO_PASSWORD') ?: null;
+        $dbName = getenv('MONGO_DATABASE') ?: 'artcreation_app_db';
+        $username = getenv('MONGO_INITDB_ROOT_USERNAME') ?: 'root';
+        $password = getenv('MONGO_INITDB_ROOT_PASSWORD') ?: 'rootpassword';
 
         // Construction de l'URI MongoDB
         $uri = $username && $password
